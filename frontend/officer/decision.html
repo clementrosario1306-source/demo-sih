@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Final Decision — GOVNEXA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css"><link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    .decision-radio-card {
+      border: 2px solid var(--border-default);
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      display: flex;
+      gap: var(--space-3);
+      align-items: flex-start;
+      margin-bottom: var(--space-3);
+    }
+    .decision-radio-card:hover {
+      border-color: var(--border-hover);
+    }
+    .decision-radio-card.selected {
+      border-color: var(--accent-cyan);
+      background: var(--accent-cyan-dim);
+    }
+    .decision-radio-card.selected.qualify {
+      border-color: var(--accent-mint);
+      background: rgba(66,232,160,0.08);
+    }
+    .decision-radio-card.selected.disqualify {
+      border-color: var(--accent-coral);
+      background: rgba(255,92,108,0.08);
+    }
+    .decision-radio-card.selected.clarify {
+      border-color: var(--accent-amber);
+      background: rgba(255,184,77,0.08);
+    }
+  </style>
+</head>
+<body>
+<div class="page-container page-enter" id="root">
+  <div class="page-header">
+    <div class="page-title-group">
+      <h1 class="page-title">Technical Evaluation Determination</h1>
+      <p class="page-subtitle">Statutory qualification decision for ABC Technologies Pvt Ltd (Tender T-2026-001)</p>
+    </div>
+    <div class="page-actions">
+      <a href="compliance.html" class="btn btn-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to Compliance
+      </a>
+      <a href="audit.html" class="btn btn-secondary">
+        View Audit Trail
+      </a>
+    </div>
+  </div>
+
+  <!-- Automated System Recommendation Banner -->
+  <div class="card" style="background:var(--bg-elevated);border-left:4px solid var(--accent-amber);margin-bottom:var(--space-6);">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:var(--space-4);">
+      <div>
+        <div style="display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-1);">
+          <span class="badge badge-warning">AUTOMATED SYSTEM FINDING</span>
+          <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-muted);">Evaluation Index: 78 / 100</span>
+        </div>
+        <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);margin-bottom:4px;">
+          Recommendation: Issue Clarification Notice Before Final Determination
+        </h3>
+        <p style="font-size:var(--text-xs);color:var(--text-secondary);max-width:650px;line-height:1.5;">
+          The bidder satisfies 10 out of 14 compliance criteria including all statutory and labour gates. However, Clause 4.2 (OEM MAF) is non-compliant due to PO upload, and MII Local Content is 18.2% (1.8% below Class II threshold). Under Rule 173 of GFR 2017, a 48-hour cure notice is recommended.
+        </p>
+      </div>
+      <div style="text-align:right;">
+        <span class="badge badge-pending">PENDING OFFICER ACTION</span>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">Officer: Arjun Mehta</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Grid -->
+  <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:var(--space-6);">
+    
+    <!-- Officer Decision Form -->
+    <div class="card">
+      <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);margin-bottom:var(--space-4);">
+        Official Competent Authority Decision
+      </h3>
+
+      <!-- Option 1: Clarify (Default Recommended) -->
+      <div class="decision-radio-card clarify selected" id="opt-clarify" onclick="selectDecision('clarify')">
+        <input type="radio" name="decision_choice" checked style="margin-top:3px;">
+        <div>
+          <div style="font-size:var(--text-sm);font-weight:var(--fw-bold);color:var(--accent-amber);">
+            Issue Statutory Clarification Notice (Recommended)
+          </div>
+          <div style="font-size:var(--text-xs);color:var(--text-secondary);margin-top:2px;">
+            Provide 48-hour cure window for bidder to furnish authentic OEM MAF and MII undertaking.
+          </div>
+        </div>
+      </div>
+
+      <!-- Option 2: Pre-Qualify -->
+      <div class="decision-radio-card qualify" id="opt-qualify" onclick="selectDecision('qualify')">
+        <input type="radio" name="decision_choice" style="margin-top:3px;">
+        <div>
+          <div style="font-size:var(--text-sm);font-weight:var(--fw-bold);color:var(--accent-mint);">
+            Pre-Qualify Bidder for Financial Bid Opening
+          </div>
+          <div style="font-size:var(--text-xs);color:var(--text-secondary);margin-top:2px;">
+            Accept submission as technically responsive and forward to commercial opening stage.
+          </div>
+        </div>
+      </div>
+
+      <!-- Option 3: Disqualify -->
+      <div class="decision-radio-card disqualify" id="opt-disqualify" onclick="selectDecision('disqualify')">
+        <input type="radio" name="decision_choice" style="margin-top:3px;">
+        <div>
+          <div style="font-size:var(--text-sm);font-weight:var(--fw-bold);color:var(--accent-coral);">
+            Reject & Technically Disqualify Bidder
+          </div>
+          <div style="font-size:var(--text-xs);color:var(--text-secondary);margin-top:2px;">
+            Disqualify under mandatory Gate Clause 4.2 for failure to submit OEM Authorization.
+          </div>
+        </div>
+      </div>
+
+      <!-- Remarks / Reason Textarea -->
+      <div class="form-group" style="margin-top:var(--space-4);">
+        <label class="form-label required">Official Determination Remarks (Recorded to Immutable Audit Trail)</label>
+        <textarea class="form-textarea" id="decision-remarks" rows="4">Technical Evaluation Committee reviewed the automated compliance report for ABC Technologies Pvt Ltd. In accordance with Section 7 of RFP guidelines, a formal clarification notice is hereby issued to remedy the missing OEM Manufacturer Authorization Form (MAF) within 48 hours.</textarea>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;margin-top:var(--space-6);">
+        <button class="btn btn-primary" onclick="openConfirmModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Record & Cryptographically Sign Decision
+        </button>
+      </div>
+    </div>
+
+    <!-- Right: Decision Ledger / Past Actions -->
+    <div>
+      <div class="card" style="margin-bottom:var(--space-6);">
+        <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);margin-bottom:var(--space-3);">
+          Evaluation Stage Progression
+        </h3>
+        <div style="display:flex;flex-direction:column;gap:var(--space-3);font-size:var(--text-xs);">
+          <div style="display:flex;align-items:center;gap:var(--space-2);">
+            <span class="badge badge-verified">✓ Done</span>
+            <span style="color:var(--text-primary);">Bid Submission & Receipt</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:var(--space-2);">
+            <span class="badge badge-verified">✓ Done</span>
+            <span style="color:var(--text-primary);">Automated Statutory Cross-Verification</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:var(--space-2);">
+            <span class="badge badge-active">● Current</span>
+            <span style="color:var(--accent-cyan);font-weight:var(--fw-semibold);">Officer Technical Evaluation Review</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:var(--space-2);opacity:0.5;">
+            <span class="badge badge-pending">○ Next</span>
+            <span>Commercial / Financial Bid Opening</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:var(--space-2);opacity:0.5;">
+            <span class="badge badge-pending">○ Next</span>
+            <span>Award of Contract & GeM Sync</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);margin-bottom:var(--space-3);">
+          Digital Signature Hash
+        </h3>
+        <div style="font-size:11px;color:var(--text-secondary);font-family:var(--font-mono);background:var(--bg-elevated);padding:var(--space-3);border-radius:var(--radius-md);">
+          Signing Certificate: CN=Arjun Mehta (Officer #OFF-9812)<br>
+          CA: NIC Digital Signing Authority 2026<br>
+          Status: DSC Token Inserted & Active
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Sign Confirmation Modal -->
+<div class="modal-backdrop" id="sign-modal" style="display:none;">
+  <div class="modal" style="max-width: 500px;">
+    <div class="modal-header">
+      <h3 class="modal-title">Sign Official Determination</h3>
+      <button class="btn btn-ghost" onclick="closeSignModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:var(--text-sm);color:var(--text-secondary);margin-bottom:var(--space-4);">
+        You are recording an official procurement determination on the permanent audit ledger. This action will be timestamped and digitally signed.
+      </p>
+      <div class="form-group">
+        <label class="form-label required">Enter DSC Token PIN / Passcode</label>
+        <input type="password" class="form-input" id="dsc-pin" placeholder="••••••••" value="123456">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeSignModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmDecision()">Confirm & Sign</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/officer.js"></script>
+<script>
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  Navigation.injectShell('officer', 'Final Decision', [
+    { label: 'Tenders', href: 'tenders.html' },
+    { label: 'T-2026-001', href: 'tenders.html' },
+    { label: 'Compliance', href: 'compliance.html' },
+    { label: 'Final Decision' }
+  ]);
+
+  let selectedDec = 'clarify';
+
+  function selectDecision(type) {
+    selectedDec = type;
+    document.querySelectorAll('.decision-radio-card').forEach(el => el.classList.remove('selected'));
+    document.getElementById('opt-' + type).classList.add('selected');
+    document.querySelector('#opt-' + type + ' input').checked = true;
+
+    const remarks = document.getElementById('decision-remarks');
+    if (type === 'qualify') {
+      remarks.value = 'Technical Evaluation Committee has reviewed and resolved all minor variances. Bidder ABC Technologies Pvt Ltd meets all threshold requirements and is hereby QUALIFIED for financial bid opening.';
+    } else if (type === 'disqualify') {
+      remarks.value = 'Bidder ABC Technologies Pvt Ltd is DISQUALIFIED under mandatory Gate Clause 4.2 due to failure to submit authentic OEM Manufacturer Authorization Form.';
+    } else {
+      remarks.value = 'In accordance with Section 7 of RFP guidelines, a formal clarification notice is hereby issued to remedy the missing OEM Manufacturer Authorization Form (MAF) within 48 hours.';
+    }
+  }
+
+  function openConfirmModal() {
+    document.getElementById('sign-modal').style.display = 'flex';
+  }
+
+  function closeSignModal() {
+    document.getElementById('sign-modal').style.display = 'none';
+  }
+
+  function confirmDecision() {
+    closeSignModal();
+    Toast.success('Decision Recorded', 'Signed determination permanently recorded to audit log with transaction hash 0x7c99a2b.');
+    setTimeout(() => {
+      window.location.href = 'audit.html';
+    }, 1200);
+  }
+</script>
+</body>
+</html>

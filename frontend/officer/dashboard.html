@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — GOVNEXA</title>
+  <meta name="description" content="Procurement Officer command-center dashboard.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+<div class="page-container page-enter" id="dashboard-root">
+
+  <!-- Welcome Banner -->
+  <div class="welcome-banner">
+    <div class="welcome-text">
+      <div class="welcome-greeting" id="greeting">Good Morning, Arjun</div>
+      <div class="welcome-role">
+        <span class="badge badge-processing">Procurement Officer</span>
+        <span>•</span>
+        <span>Dept. of Public Procurement</span>
+      </div>
+      <div class="welcome-date" id="current-date" style="margin-top:var(--space-3);font-size:var(--text-sm);color:var(--text-muted)"></div>
+    </div>
+    <div class="welcome-visual">
+      <div style="text-align:right">
+        <div style="font-size:var(--text-xs);color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:var(--space-2)">Active Tender</div>
+        <div style="font-size:var(--text-sm);font-weight:var(--fw-semibold);color:var(--text-primary)">T-2026-001</div>
+        <div style="font-size:var(--text-xs);color:var(--text-secondary)">Supply of IT Equipment</div>
+        <div style="margin-top:var(--space-2)"><span class="badge badge-active">Active</span></div>
+      </div>
+      <div style="width:1px;height:50px;background:var(--border-default)"></div>
+      <div style="text-align:right">
+        <div style="font-size:var(--text-xs);color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:var(--space-2)">Closes In</div>
+        <div style="font-size:var(--text-xl);font-weight:var(--fw-bold);font-family:var(--font-mono);color:var(--accent-amber)">02d 14h</div>
+        <div style="font-size:var(--text-xs);color:var(--text-muted)">Sep 24, 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card kpi-cyan animate-fadeInUp stagger-1">
+      <div class="kpi-header">
+        <div>
+          <div class="kpi-value" id="kpi-tenders">8</div>
+          <div class="kpi-label">Active Tenders</div>
+        </div>
+        <div class="kpi-icon-wrap cyan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+      </div>
+      <div class="kpi-trend up">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        +2 this month
+      </div>
+    </div>
+
+    <div class="kpi-card kpi-violet animate-fadeInUp stagger-2">
+      <div class="kpi-header">
+        <div>
+          <div class="kpi-value" id="kpi-bidders">47</div>
+          <div class="kpi-label">Total Bidders</div>
+        </div>
+        <div class="kpi-icon-wrap violet">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+      </div>
+      <div class="kpi-trend up">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        +5 this week
+      </div>
+    </div>
+
+    <div class="kpi-card kpi-amber animate-fadeInUp stagger-3">
+      <div class="kpi-header">
+        <div>
+          <div class="kpi-value" id="kpi-reviews">12</div>
+          <div class="kpi-label">Pending Reviews</div>
+        </div>
+        <div class="kpi-icon-wrap amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+      </div>
+      <div class="kpi-trend down">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+        3 urgent today
+      </div>
+    </div>
+
+    <div class="kpi-card kpi-coral animate-fadeInUp stagger-4">
+      <div class="kpi-header">
+        <div>
+          <div class="kpi-value" id="kpi-highrisk">4</div>
+          <div class="kpi-label">High Risk Bids</div>
+        </div>
+        <div class="kpi-icon-wrap coral">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+      </div>
+      <div class="kpi-trend neutral">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Unchanged
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Dashboard Grid -->
+  <div class="dashboard-grid">
+
+    <!-- Compliance Overview (donut) -->
+    <div class="chart-card animate-fadeInUp stagger-2">
+      <div class="chart-card-header">
+        <div>
+          <div class="chart-card-title">Compliance Overview</div>
+          <div class="chart-card-subtitle">T-2026-001 · 5 Bidders</div>
+        </div>
+        <span class="badge badge-active">Live</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:var(--space-8)">
+        <div class="chart-wrapper">
+          <svg width="140" height="140" class="progress-ring" viewBox="0 0 140 140" aria-label="Compliance distribution chart">
+            <!-- Track -->
+            <circle cx="70" cy="70" r="55" fill="none" stroke="var(--bg-overlay)" stroke-width="16"/>
+            <!-- Verified: 34 / 60 reqs = 56.7% -->
+            <circle cx="70" cy="70" r="55" fill="none" stroke="var(--accent-mint)"  stroke-width="16" stroke-dasharray="345.6 690" stroke-dashoffset="0"    stroke-linecap="round"/>
+            <!-- Review: 14 = 23.3% -->
+            <circle cx="70" cy="70" r="55" fill="none" stroke="var(--accent-amber)" stroke-width="16" stroke-dasharray="143.2 690" stroke-dashoffset="-345.6" stroke-linecap="round"/>
+            <!-- Failed: 8 = 13.3% -->
+            <circle cx="70" cy="70" r="55" fill="none" stroke="var(--accent-coral)" stroke-width="16" stroke-dasharray="82 690" stroke-dashoffset="-488.8" stroke-linecap="round"/>
+            <!-- Missing: 4 = 6.7% -->
+            <circle cx="70" cy="70" r="55" fill="none" stroke="var(--text-muted)"   stroke-width="16" stroke-dasharray="41 690" stroke-dashoffset="-570.8" stroke-linecap="round"/>
+          </svg>
+          <div class="chart-center-text">
+            <div class="chart-center-value">60</div>
+            <div class="chart-center-label">Total Reqs</div>
+          </div>
+        </div>
+        <div class="donut-legend">
+          <div class="donut-legend-item">
+            <div class="donut-legend-dot" style="background:var(--accent-mint)"></div>
+            <span class="donut-legend-label">Verified</span>
+            <span class="donut-legend-value">34</span>
+          </div>
+          <div class="donut-legend-item">
+            <div class="donut-legend-dot" style="background:var(--accent-amber)"></div>
+            <span class="donut-legend-label">Review Required</span>
+            <span class="donut-legend-value">14</span>
+          </div>
+          <div class="donut-legend-item">
+            <div class="donut-legend-dot" style="background:var(--accent-coral)"></div>
+            <span class="donut-legend-label">Non-Compliant</span>
+            <span class="donut-legend-value">8</span>
+          </div>
+          <div class="donut-legend-item">
+            <div class="donut-legend-dot" style="background:var(--text-muted)"></div>
+            <span class="donut-legend-label">Missing</span>
+            <span class="donut-legend-value">4</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tender Activity (bar chart) -->
+    <div class="chart-card animate-fadeInUp stagger-3">
+      <div class="chart-card-header">
+        <div>
+          <div class="chart-card-title">Bid Activity</div>
+          <div class="chart-card-subtitle">Last 7 days</div>
+        </div>
+      </div>
+      <div class="bar-chart-container" id="bid-chart" aria-label="Bid activity bar chart">
+        <!-- Rendered by JS -->
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:var(--space-3)" id="bid-chart-labels"></div>
+    </div>
+
+    <!-- Risk Distribution -->
+    <div class="chart-card animate-fadeInUp stagger-4">
+      <div class="chart-card-header">
+        <div>
+          <div class="chart-card-title">Risk Distribution</div>
+          <div class="chart-card-subtitle">Across all active tenders</div>
+        </div>
+      </div>
+      <div class="risk-distribution">
+        <div class="risk-distribution-item">
+          <span class="risk-dist-label" style="color:var(--risk-low)">Low</span>
+          <div class="risk-dist-bar-track"><div class="risk-dist-bar-fill" style="width:45%;background:var(--risk-low)"></div></div>
+          <span class="risk-dist-count">21</span>
+        </div>
+        <div class="risk-distribution-item">
+          <span class="risk-dist-label" style="color:var(--risk-medium)">Medium</span>
+          <div class="risk-dist-bar-track"><div class="risk-dist-bar-fill" style="width:32%;background:var(--risk-medium)"></div></div>
+          <span class="risk-dist-count">15</span>
+        </div>
+        <div class="risk-distribution-item">
+          <span class="risk-dist-label" style="color:var(--risk-high)">High</span>
+          <div class="risk-dist-bar-track"><div class="risk-dist-bar-fill" style="width:17%;background:var(--risk-high)"></div></div>
+          <span class="risk-dist-count">8</span>
+        </div>
+        <div class="risk-distribution-item">
+          <span class="risk-dist-label" style="color:var(--risk-critical)">Critical</span>
+          <div class="risk-dist-bar-track"><div class="risk-dist-bar-fill" style="width:6%;background:var(--risk-critical)"></div></div>
+          <span class="risk-dist-count">3</span>
+        </div>
+      </div>
+      <div style="margin-top:var(--space-5);padding-top:var(--space-5);border-top:1px solid var(--border-subtle)">
+        <div style="font-size:var(--text-xs);color:var(--text-muted);margin-bottom:var(--space-2)">IMPORTANT</div>
+        <div style="font-size:var(--text-xs);color:var(--text-secondary);line-height:var(--lh-relaxed)">Risk classification does not automatically determine bid qualification. All decisions require officer review.</div>
+      </div>
+    </div>
+
+    <!-- Pending Reviews -->
+    <div class="chart-card col-span-2 animate-fadeInUp stagger-3">
+      <div class="chart-card-header">
+        <div>
+          <div class="chart-card-title">Pending Officer Reviews</div>
+          <div class="chart-card-subtitle">Bids requiring your attention</div>
+        </div>
+        <a href="bidders.html" class="btn btn-secondary btn-sm">View All</a>
+      </div>
+      <div class="pending-list" id="pending-list"></div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="chart-card animate-fadeInUp stagger-4">
+      <div class="chart-card-header">
+        <div>
+          <div class="chart-card-title">Recent Activity</div>
+          <div class="chart-card-subtitle">Today</div>
+        </div>
+      </div>
+      <div class="activity-list" id="activity-list"></div>
+    </div>
+
+  </div>
+
+  <!-- Quick Actions -->
+  <div style="margin-bottom:var(--space-6)">
+    <div class="section-title">Quick Actions</div>
+    <div class="quick-actions">
+      <a href="create-tender.html" class="quick-action-card">
+        <div class="quick-action-icon" style="background:var(--accent-cyan-dim);color:var(--accent-cyan)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+        <div class="quick-action-label">Create Tender</div>
+        <div class="quick-action-desc">Start a new procurement</div>
+      </a>
+      <a href="verification.html" class="quick-action-card">
+        <div class="quick-action-icon" style="background:var(--accent-violet-dim);color:var(--accent-violet)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="quick-action-label">Run Verification</div>
+        <div class="quick-action-desc">Verify bidder compliance</div>
+      </a>
+      <a href="bidders.html" class="quick-action-card">
+        <div class="quick-action-icon" style="background:var(--status-verified-bg);color:var(--accent-mint)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        </div>
+        <div class="quick-action-label">View Bidders</div>
+        <div class="quick-action-desc">47 total, 12 pending</div>
+      </a>
+      <a href="discrepancies.html" class="quick-action-card">
+        <div class="quick-action-icon" style="background:var(--accent-amber-dim);color:var(--accent-amber)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="quick-action-label">Discrepancies</div>
+        <div class="quick-action-desc">3 critical issues</div>
+      </a>
+      <a href="comparison.html" class="quick-action-card">
+        <div class="quick-action-icon" style="background:var(--accent-cyan-dim);color:var(--accent-cyan)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7m0-18H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7m0-18v18"/></svg>
+        </div>
+        <div class="quick-action-label">Compare Bidders</div>
+        <div class="quick-action-desc">Side-by-side analysis</div>
+      </a>
+      <a href="reports.html" class="quick-action-card">
+        <div class="quick-action-icon" style="background:var(--accent-violet-dim);color:var(--accent-violet)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <div class="quick-action-label">Generate Report</div>
+        <div class="quick-action-desc">PDF compliance report</div>
+      </a>
+    </div>
+  </div>
+
+</div><!-- end page-container -->
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script>
+  // Guard
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  if (localStorage.getItem('govnexa_role') !== 'officer') window.location.href = '../login.html';
+
+  // Inject shell
+  Navigation.injectShell('officer', 'Dashboard', [{ label: 'Dashboard' }]);
+
+  // Greeting
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening';
+  const user = JSON.parse(localStorage.getItem('govnexa_user') || '{}');
+  const firstName = (user.name || 'Officer').split(' ')[0];
+  document.getElementById('greeting').textContent = `${greeting}, ${firstName}`;
+  document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+
+  // Animate KPI counters
+  document.querySelectorAll('.kpi-value').forEach(el => {
+    const target = parseInt(el.textContent);
+    el.textContent = '0';
+    setTimeout(() => Utils.animateCount(el, target, 1000), 300);
+  });
+
+  // Bar chart
+  const bidData = [
+    { label: 'Mon', value: 5 },
+    { label: 'Tue', value: 8 },
+    { label: 'Wed', value: 6 },
+    { label: 'Thu', value: 12 },
+    { label: 'Fri', value: 9 },
+    { label: 'Sat', value: 3 },
+    { label: 'Sun', value: 4 },
+  ];
+  const maxV = Math.max(...bidData.map(d => d.value));
+  document.getElementById('bid-chart').innerHTML = bidData.map((d, i) => `
+    <div class="bar-chart-item stagger-${i+1}">
+      <div style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono)">${d.value}</div>
+      <div class="bar-chart-bar" style="height:${(d.value/maxV)*100}%" title="${d.label}: ${d.value} bids"></div>
+    </div>`).join('');
+  document.getElementById('bid-chart-labels').innerHTML = bidData.map(d =>
+    `<span style="font-size:10px;color:var(--text-muted);flex:1;text-align:center">${d.label}</span>`).join('');
+
+  // Pending reviews
+  const PENDING = [
+    { name: 'ABC Technologies Pvt Ltd',  tender: 'T-2026-001', score: 78, risk: 'Medium', docs: '14/14', issues: 3, href: 'compliance.html' },
+    { name: 'Sunrise Industries',         tender: 'T-2026-001', score: 64, risk: 'High',   docs: '12/14', issues: 5, href: 'compliance.html' },
+    { name: 'National Traders',           tender: 'T-2026-001', score: 55, risk: 'Critical', docs: '11/14', issues: 7, href: 'compliance.html' },
+    { name: 'Techno Build Ltd',           tender: 'T-2026-001', score: 82, risk: 'Medium', docs: '14/14', issues: 2, href: 'compliance.html' },
+  ];
+  document.getElementById('pending-list').innerHTML = PENDING.map((p, i) => `
+    <a href="${p.href}" class="pending-item animate-fadeInUp stagger-${i+1}" style="text-decoration:none">
+      <div class="bidder-avatar-sm">${Utils.initials(p.name)}</div>
+      <div class="pending-item-info">
+        <div class="pending-item-name">${p.name}</div>
+        <div class="pending-item-meta">${p.tender} · ${p.docs} docs · ${p.issues} issues</div>
+      </div>
+      <span class="badge ${Utils.riskToBadge(p.risk)}">${p.risk}</span>
+      <div class="pending-item-score" style="color:${p.score>=80?'var(--accent-mint)':p.score>=60?'var(--accent-amber)':'var(--accent-coral)'}">
+        ${p.score}
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>`).join('');
+
+  // Activity
+  const ACTIVITY = [
+    { icon: 'shield', color: 'cyan',   bg: 'var(--accent-cyan-dim)',   title: 'Verification Completed', desc: 'Run #3 — T-2026-001 · 4 bidders processed',    time: '10:32' },
+    { icon: 'alert',  color: 'coral',  bg: 'var(--accent-coral-dim)',  title: 'OEM Missing Flagged',    desc: 'ABC Technologies Pvt Ltd · Critical discrepancy', time: '10:27' },
+    { icon: 'user',   color: 'violet', bg: 'var(--accent-violet-dim)', title: 'New Bid Submitted',      desc: 'National Traders submitted bid for T-2026-001',   time: '10:22' },
+    { icon: 'check',  color: 'mint',   bg: 'var(--status-verified-bg)', title: 'GST Certificate Verified', desc: 'Global Infra Solutions · GST active and valid',  time: '10:15' },
+    { icon: 'doc',    color: 'cyan',   bg: 'var(--accent-cyan-dim)',   title: 'Requirements Extracted',  desc: 'T-2026-001 PDF · 12 requirements identified',     time: '10:05' },
+  ];
+  const actIcon = {
+    shield: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+    alert:  `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+    user:   `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+    check:  `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+    doc:    `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,
+  };
+  const colorMap = { cyan: 'var(--accent-cyan)', coral: 'var(--accent-coral)', violet: 'var(--accent-violet)', mint: 'var(--accent-mint)' };
+  document.getElementById('activity-list').innerHTML = ACTIVITY.map(a => `
+    <div class="activity-item">
+      <div class="activity-icon" style="background:${a.bg};color:${colorMap[a.color]}">${actIcon[a.icon]}</div>
+      <div class="activity-text">
+        <div class="activity-title">${a.title}</div>
+        <div class="activity-desc">${a.desc}</div>
+      </div>
+      <div class="activity-time">${a.time}</div>
+    </div>`).join('');
+</script>
+</body>
+</html>

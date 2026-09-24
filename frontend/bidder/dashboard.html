@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bidder Command Center — GOVNEXA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css"><link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+<div class="page-container page-enter" id="root">
+  
+  <!-- Welcome Banner -->
+  <div class="welcome-banner">
+    <div class="welcome-text">
+      <div class="welcome-greeting">Welcome back, Priya</div>
+      <div class="welcome-role">
+        <span class="badge badge-verified">ABC Technologies Pvt Ltd</span>
+        <span>•</span>
+        <span>MSME & NSIC Certified Supplier</span>
+      </div>
+      <div style="margin-top:var(--space-3);font-size:var(--text-sm);color:var(--text-muted);">
+        GSTIN: <code style="color:var(--text-primary)">27AABCU9603R1ZM</code> • DPIIT Startup Reg: Active
+      </div>
+    </div>
+    <div class="welcome-visual">
+      <div style="text-align:right;">
+        <div style="font-size:var(--text-xs);color:var(--text-muted);text-transform:uppercase;margin-bottom:var(--space-1);">Primary Submission</div>
+        <div style="font-size:var(--text-sm);font-weight:var(--fw-semibold);color:var(--text-primary);">T-2026-001 (IT Supply)</div>
+        <div style="margin-top:var(--space-2);"><span class="badge badge-warning">Under Verification</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Urgent Clarification Action Banner -->
+  <div class="alert alert-danger animate-pulse" style="margin-bottom:var(--space-6);">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <div style="flex:1;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-2);">
+        <div>
+          <strong style="color:var(--accent-coral);">URGENT CLARIFICATION NOTICE:</strong> Tender T-2026-001 Procurement Officer flagged your OEM document (PO uploaded instead of MAF).
+        </div>
+        <a href="compliance.html" class="btn btn-primary" style="background:var(--accent-coral);border-color:var(--accent-coral);padding:4px 12px;font-size:var(--text-xs);">
+          Respond to Notice (24h left)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI Grid -->
+  <div class="kpi-grid">
+    <div class="kpi-card kpi-cyan animate-fadeInUp stagger-1">
+      <div class="kpi-header">
+        <div>
+          <div class="kpi-value">2</div>
+          <div class="kpi-label">Active Bid Submissions</div>
+        </div>
+        <div class="kpi-icon-wrap cyan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+      </div>
+      <div class="kpi-trend up">T-2026-001 & T-2026-002</div>
+    </div>
+
+    <div class="kpi-card kpi-mint animate-fadeInUp stagger-2">
+      <div class="kpi-header">
+        <div>
+          <div class="kpi-value">14 / 14</div>
+          <div class="kpi-label">Document Vault Health</div>
+        </div>
+        <div class="kpi-icon-wrap mint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+      </div>
+      <div class="kpi-trend up" style="color:var(--accent-mint);">10 Verified • 2 Review • 2 Attention</div>
+    </div>
+
+    <div class="kpi-card kpi-amber animate-fadeInUp stagger-3">
+      <div class="kpi-header">
+        <div>
+          <div class="kpi-value">78 <small style="font-size:16px;">/ 100</small></div>
+          <div class="kpi-label">Compliance Pre-Score</div>
+        </div>
+        <div class="kpi-icon-wrap amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+      </div>
+      <div class="kpi-trend down" style="color:var(--accent-amber);">Potential 98/100 after MAF upload</div>
+    </div>
+
+    <div class="kpi-card kpi-coral animate-fadeInUp stagger-4">
+      <div class="kpi-header">
+        <div>
+          <div class="kpi-value">1</div>
+          <div class="kpi-label">Action Items Required</div>
+        </div>
+        <div class="kpi-icon-wrap coral">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+      </div>
+      <div class="kpi-trend down">OEM Clarification pending</div>
+    </div>
+  </div>
+
+  <!-- Active Bids & Document Locker Quick Access -->
+  <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:var(--space-6);">
+    
+    <!-- My Active Bids -->
+    <div class="table-container">
+      <div class="table-toolbar">
+        <span class="table-toolbar-title">My Tender Submissions</span>
+        <a href="tenders.html" class="btn btn-secondary" style="font-size:var(--text-xs);">Browse All Tenders</a>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Tender</th>
+              <th>Submitted Date</th>
+              <th>Compliance</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div style="font-weight:var(--fw-semibold);color:var(--text-primary);">T-2026-001</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Supply of IT Equipment (₹4.2 Cr)</div>
+              </td>
+              <td style="font-size:var(--text-xs);">Sep 22, 10:25 AM</td>
+              <td><span class="badge badge-warning">78/100 (Med Risk)</span></td>
+              <td><span class="badge badge-warning">Under Review</span></td>
+              <td>
+                <a href="compliance.html" class="btn btn-primary" style="padding:4px 8px;font-size:var(--text-xs);">
+                  Fix Issues
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="font-weight:var(--fw-semibold);color:var(--text-primary);">T-2026-002</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Network Infrastructure Upgrade</div>
+              </td>
+              <td style="font-size:var(--text-xs);">Sep 20, 14:10 PM</td>
+              <td><span class="badge badge-verified">94/100 (Low Risk)</span></td>
+              <td><span class="badge badge-verified">Pre-Qualified</span></td>
+              <td>
+                <a href="tender-details.html?id=T-2026-002" class="btn btn-secondary" style="padding:4px 8px;font-size:var(--text-xs);">
+                  Details
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Quick Document Vault Status -->
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-4);">
+        <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);">
+          14-Document Vault
+        </h3>
+        <a href="documents.html" class="btn btn-ghost" style="font-size:var(--text-xs);padding:4px 8px;">View Vault</a>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:var(--space-2);">
+        <div style="display:flex;justify-content:space-between;font-size:var(--text-xs);padding:6px 0;border-bottom:1px solid var(--border-subtle);">
+          <span style="color:var(--text-primary);">GST Certificate (Active)</span>
+          <span class="badge badge-verified" style="font-size:10px;">VERIFIED</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:var(--text-xs);padding:6px 0;border-bottom:1px solid var(--border-subtle);">
+          <span style="color:var(--text-primary);">PAN Card Verified</span>
+          <span class="badge badge-verified" style="font-size:10px;">VERIFIED</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:var(--text-xs);padding:6px 0;border-bottom:1px solid var(--border-subtle);background:rgba(255,92,108,0.08);padding:6px;border-radius:var(--radius-sm);">
+          <span style="color:var(--accent-coral);font-weight:var(--fw-semibold);">OEM Authorization (PO uploaded)</span>
+          <span class="badge badge-critical" style="font-size:10px;">REPLACE</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:var(--text-xs);padding:6px 0;border-bottom:1px solid var(--border-subtle);background:rgba(255,184,77,0.08);padding:6px;border-radius:var(--radius-sm);">
+          <span style="color:var(--accent-amber);">Local Content Declaration (18.2%)</span>
+          <span class="badge badge-warning" style="font-size:10px;">UPDATE</span>
+        </div>
+      </div>
+
+      <a href="documents.html" class="btn btn-primary" style="width:100%;justify-content:center;font-size:var(--text-xs);margin-top:var(--space-4);">
+        Upload & Replace Documents
+      </a>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/bidder.js"></script>
+<script>
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  Navigation.injectShell('bidder', 'Dashboard', [{ label: 'Dashboard' }]);
+</script>
+</body>
+</html>

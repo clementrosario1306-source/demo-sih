@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bid Submission — GOVNEXA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css"><link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+<div class="page-container page-enter" id="root">
+  <div class="page-header">
+    <div class="page-title-group">
+      <h1 class="page-title">Bid Submission Package Builder</h1>
+      <p class="page-subtitle">Assemble compliance vault documents, complete financial quotes, and submit bid for T-2026-001</p>
+    </div>
+    <div class="page-actions">
+      <a href="tenders.html" class="btn btn-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Cancel & Return
+      </a>
+      <button class="btn btn-primary" onclick="submitFinalBid()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Submit Official Bid Package
+      </button>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:var(--space-6);">
+    
+    <!-- Left: Document Package Checklist & Pricing Form -->
+    <div>
+      
+      <!-- Section 1: Attached Documents -->
+      <div class="card" style="margin-bottom:var(--space-6);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-4);border-bottom:1px solid var(--border-subtle);padding-bottom:var(--space-2);">
+          <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);">
+            1. Statutory Document Package (14 Attached)
+          </h3>
+          <span class="badge badge-verified">14/14 Attached from Vault</span>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:var(--space-2);max-height:280px;overflow-y:auto;padding-right:var(--space-2);font-size:var(--text-xs);">
+          <div style="display:flex;justify-content:space-between;padding:6px;background:var(--bg-elevated);border-radius:var(--radius-sm);">
+            <span style="color:var(--text-primary);">1. GST Registration Certificate</span>
+            <span class="badge badge-verified" style="font-size:10px;">✓ Attached (Active)</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:6px;background:var(--bg-elevated);border-radius:var(--radius-sm);">
+            <span style="color:var(--text-primary);">2. PAN Card Copy</span>
+            <span class="badge badge-verified" style="font-size:10px;">✓ Attached</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:6px;background:var(--bg-elevated);border-radius:var(--radius-sm);">
+            <span style="color:var(--text-primary);">3. Income Tax Return (ITR AY 23-24)</span>
+            <span class="badge badge-warning" style="font-size:10px;">⚠ Attached</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:6px;background:rgba(255,92,108,0.08);border:1px solid rgba(255,92,108,0.3);border-radius:var(--radius-sm);">
+            <span style="color:var(--accent-coral);font-weight:var(--fw-semibold);">4. OEM Authorization Form (MAF)</span>
+            <span class="badge badge-critical" style="font-size:10px;">✕ PO Attached (Replace recommended)</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:6px;background:var(--bg-elevated);border-radius:var(--radius-sm);">
+            <span style="color:var(--text-primary);">5. EPFO & ESIC Registrations</span>
+            <span class="badge badge-verified" style="font-size:10px;">✓ Attached</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:6px;background:var(--bg-elevated);border-radius:var(--radius-sm);">
+            <span style="color:var(--text-primary);">6. CA Turnover Certificate (₹4.8 Cr)</span>
+            <span class="badge badge-verified" style="font-size:10px;">✓ Attached</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Financial Quote -->
+      <div class="card">
+        <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);margin-bottom:var(--space-4);border-bottom:1px solid var(--border-subtle);padding-bottom:var(--space-2);">
+          2. Commercial Bid & Schedule of Rates
+        </h3>
+
+        <div class="form-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);">
+          <div class="form-group">
+            <label class="form-label required">Total Quoted Price (Excl. GST)</label>
+            <input type="text" class="form-input" value="₹ 3,92,00,000" id="quote-val">
+          </div>
+          <div class="form-group">
+            <label class="form-label required">Applicable GST Rate (%)</label>
+            <select class="form-select">
+              <option selected>18% Standard GST</option>
+              <option>12% Concessional</option>
+              <option>28%</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label required">Delivery Timeline (Weeks)</label>
+            <input type="number" class="form-input" value="6">
+          </div>
+          <div class="form-group">
+            <label class="form-label required">Warranty Commitment</label>
+            <input type="text" class="form-input" value="36 Months On-Site" readonly>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right: Pre-Submission Compliance Simulator & Declaration -->
+    <div>
+      <div class="card" style="margin-bottom:var(--space-6);">
+        <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);margin-bottom:var(--space-3);">
+          Pre-Submission Compliance Health
+        </h3>
+
+        <div style="background:var(--bg-elevated);padding:var(--space-4);border-radius:var(--radius-md);margin-bottom:var(--space-4);text-align:center;">
+          <div style="font-size:var(--text-xs);color:var(--text-muted);text-transform:uppercase;">Estimated Pre-Score</div>
+          <div style="font-size:32px;font-family:var(--font-mono);font-weight:var(--fw-bold);color:var(--accent-amber);margin:4px 0;">
+            78 / 100
+          </div>
+          <span class="badge badge-warning">MEDIUM RISK • CLARIFICATION LIKELY</span>
+        </div>
+
+        <div class="alert alert-warning" style="font-size:11px;line-height:1.5;">
+          <strong>Recommendation:</strong> Replace <code>OEM_Letter.pdf</code> with an authentic OEM MAF in your Document Vault before submitting to boost score to <strong>98/100 (Low Risk)</strong>!
+        </div>
+      </div>
+
+      <!-- Legal Undertaking -->
+      <div class="card">
+        <h3 style="font-size:var(--text-sm);font-weight:var(--fw-bold);color:var(--text-primary);margin-bottom:var(--space-3);">
+          Statutory Undertaking
+        </h3>
+        <label class="checkbox-container" style="font-size:var(--text-xs);line-height:1.5;margin-bottom:var(--space-4);">
+          <input type="checkbox" checked id="chk-declare">
+          I, <strong>Priya Nair (Authorized Signatory)</strong>, hereby declare that all uploaded certificates are authentic, valid, and unmodified. Any false declaration will invite action under the Indian Penal Code and GFR Rule 175.
+        </label>
+
+        <button class="btn btn-primary" style="width:100%;justify-content:center;font-size:var(--text-xs);" onclick="submitFinalBid()">
+          Digitally Sign & Submit Bid Package
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/bidder.js"></script>
+<script>
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  Navigation.injectShell('bidder', 'Bid Submission', [
+    { label: 'Tenders', href: 'tenders.html' },
+    { label: 'T-2026-001', href: 'tender-details.html' },
+    { label: 'Submission Package' }
+  ]);
+
+  function submitFinalBid() {
+    if (!document.getElementById('chk-declare').checked) {
+      Toast.error('Declaration Required', 'Please check the statutory undertaking box.');
+      return;
+    }
+    Toast.success('Bid Submitted', 'Bid package successfully recorded on portal. Acknowledgment #BID-001-ACK generated.');
+    setTimeout(() => {
+      window.location.href = 'dashboard.html';
+    }, 1200);
+  }
+</script>
+</body>
+</html>

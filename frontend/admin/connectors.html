@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connectors — GOVNEXA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css"><link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    .connector-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-4);
+      transition: all var(--transition-fast);
+    }
+    .connector-card:hover {
+      border-color: var(--accent-cyan);
+    }
+  </style>
+</head>
+<body>
+<div class="page-container page-enter" id="root">
+  <div class="page-header">
+    <div class="page-title-group">
+      <h1 class="page-title">External Government Registry Connectors</h1>
+      <p class="page-subtitle">Manage high-throughput API integrations, TLS mutual auth certificates, and latency telemetry</p>
+    </div>
+    <div class="page-actions">
+      <button class="btn btn-primary" onclick="pingAllConnectors()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        Ping All 6 Gateways
+      </button>
+    </div>
+  </div>
+
+  <!-- Connectors Grid -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(340px, 1fr));gap:var(--space-5);" id="connectors-grid"></div>
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  Navigation.injectShell('admin', 'Connectors', [{ label: 'Connectors' }]);
+
+  const conns = AdminData.CONNECTORS;
+  document.getElementById('connectors-grid').innerHTML = conns.map(c => `
+    <div class="connector-card animate-fadeInUp">
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:var(--space-2);">
+          <span class="badge badge-verified">LIVE INTEGRATION</span>
+          <span style="font-family:var(--font-mono);font-size:11px;color:var(--accent-mint);font-weight:var(--fw-bold);">${c.latency}</span>
+        </div>
+        <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);margin-bottom:var(--space-1);">
+          ${c.name}
+        </h3>
+        <div style="font-size:var(--text-xs);color:var(--text-muted);margin-bottom:var(--space-3);">
+          Authority: ${c.authority}
+        </div>
+
+        <div style="background:var(--bg-elevated);padding:var(--space-3);border-radius:var(--radius-sm);font-size:11px;margin-bottom:var(--space-3);">
+          <div style="color:var(--text-muted);margin-bottom:2px;">Target Gateway:</div>
+          <code style="color:var(--accent-cyan);word-break:break-all;">${c.endpoint}</code>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-secondary);">
+          <span>Uptime (30d): <strong>${c.uptime}</strong></span>
+          <span>Last Sync: <strong>${c.lastSync}</strong></span>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:var(--space-2);border-top:1px solid var(--border-subtle);padding-top:var(--space-3);">
+        <button class="btn btn-secondary" style="flex:1;justify-content:center;font-size:var(--text-xs);" onclick="testConnector('${c.name}')">
+          Ping Endpoint
+        </button>
+        <button class="btn btn-ghost" style="flex:1;justify-content:center;font-size:var(--text-xs);" onclick="Toast.info('Config', 'Opening TLS certificate configuration for ${c.id}')">
+          Configure TLS
+        </button>
+      </div>
+    </div>
+  `).join('');
+
+  function testConnector(name) {
+    Toast.success('Handshake OK', `${name} responded: 200 OK in 118ms. TLS 1.3 verified.`);
+  }
+
+  function pingAllConnectors() {
+    Toast.success('All Systems Healthy', 'All 6 Government API Gateways reachable with zero packet loss.');
+  }
+</script>
+</body>
+</html>

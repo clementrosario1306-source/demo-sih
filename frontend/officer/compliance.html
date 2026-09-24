@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compliance Audit — GOVNEXA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css"><link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    .compliance-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: var(--space-6);
+      align-items: start;
+    }
+    @media (max-width: 1200px) {
+      .compliance-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .requirement-row {
+      cursor: pointer;
+      transition: background var(--transition-fast);
+    }
+    .requirement-row:hover {
+      background: var(--bg-surface-hover) !important;
+    }
+    .requirement-row.selected {
+      background: var(--accent-cyan-dim) !important;
+      border-left: 3px solid var(--accent-cyan);
+    }
+    .detail-drawer {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      position: sticky;
+      top: var(--space-6);
+    }
+  </style>
+</head>
+<body>
+<div class="page-container page-enter" id="root">
+  
+  <!-- Header with Bidder Switching -->
+  <div class="page-header">
+    <div class="page-title-group">
+      <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-1);">
+        <h1 class="page-title" id="bidder-header-name">ABC Technologies Pvt Ltd</h1>
+        <span class="badge badge-warning" id="bidder-header-risk">MEDIUM RISK (78/100)</span>
+      </div>
+      <p class="page-subtitle" id="bidder-header-sub">Tender T-2026-001 • Bid ID: BID-001 • MSME / NSIC Registered</p>
+    </div>
+    <div class="page-actions">
+      <div class="select-wrapper" style="min-width: 220px;">
+        <select class="form-select" id="bidder-selector" onchange="switchBidder(this.value)">
+          <option value="BID-001" selected>ABC Technologies (78 - Med)</option>
+          <option value="BID-002">Global Infra Solutions (91 - Low)</option>
+          <option value="BID-003">Sunrise Industries (64 - High)</option>
+          <option value="BID-004">Techno Build Ltd (82 - Med)</option>
+          <option value="BID-005">National Traders (55 - Crit)</option>
+        </select>
+      </div>
+      <a href="decision.html?bidder=BID-001" id="btn-decision-link" class="btn btn-primary">
+        Record Final Decision
+      </a>
+    </div>
+  </div>
+
+  <!-- Quick Nav Pills -->
+  <div style="display:flex;gap:var(--space-3);margin-bottom:var(--space-6);flex-wrap:wrap;">
+    <a href="compliance.html" class="btn btn-primary" style="padding:6px 14px;font-size:var(--text-xs);">Compliance Matrix</a>
+    <a href="evidence.html?bidder=BID-001" class="btn btn-secondary" style="padding:6px 14px;font-size:var(--text-xs);">Evidence Chain</a>
+    <a href="discrepancies.html?bidder=BID-001" class="btn btn-secondary" style="padding:6px 14px;font-size:var(--text-xs);">Discrepancy Center (3)</a>
+    <a href="score.html?bidder=BID-001" class="btn btn-secondary" style="padding:6px 14px;font-size:var(--text-xs);">Score Breakdown</a>
+    <a href="risk.html?bidder=BID-001" class="btn btn-secondary" style="padding:6px 14px;font-size:var(--text-xs);">Risk Assessment</a>
+    <a href="audit.html" class="btn btn-secondary" style="padding:6px 14px;font-size:var(--text-xs);">Audit Log</a>
+  </div>
+
+  <!-- Summary Banner -->
+  <div class="card" style="margin-bottom:var(--space-6);padding:var(--space-5);">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:var(--space-4);align-items:center;">
+      <div>
+        <div style="font-size:var(--text-xs);color:var(--text-muted);text-transform:uppercase;">Overall Compliance</div>
+        <div style="font-size:var(--text-2xl);font-weight:var(--fw-bold);color:var(--accent-amber);" id="metric-score">78 / 100</div>
+        <div style="font-size:11px;color:var(--text-secondary);">14 Documents Audited</div>
+      </div>
+      <div>
+        <div style="font-size:var(--text-xs);color:var(--text-muted);text-transform:uppercase;">Verified Passed</div>
+        <div style="font-size:var(--text-2xl);font-weight:var(--fw-bold);color:var(--accent-mint);" id="metric-verified">10 Rules</div>
+        <div style="font-size:11px;color:var(--text-secondary);">100% Cryptographic Match</div>
+      </div>
+      <div>
+        <div style="font-size:var(--text-xs);color:var(--text-muted);text-transform:uppercase;">Review Required</div>
+        <div style="font-size:var(--text-2xl);font-weight:var(--fw-bold);color:var(--accent-amber);" id="metric-review">2 Rules</div>
+        <div style="font-size:11px;color:var(--text-secondary);">Minor Variation / Threshold</div>
+      </div>
+      <div>
+        <div style="font-size:var(--text-xs);color:var(--text-muted);text-transform:uppercase;">Non-Compliant / Missing</div>
+        <div style="font-size:var(--text-2xl);font-weight:var(--fw-bold);color:var(--accent-coral);" id="metric-fail">2 Rules</div>
+        <div style="font-size:11px;color:var(--text-secondary);">OEM Auth + Declaration</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2-Column Layout: Table + Detail Inspector -->
+  <div class="compliance-layout">
+    
+    <!-- Compliance Table -->
+    <div class="table-container">
+      <div class="table-toolbar">
+        <span class="table-toolbar-title">14-Document Compliance Matrix</span>
+        <div class="table-search">
+          <span class="table-search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+          <input type="search" class="table-search-input" id="table-search" placeholder="Filter rules...">
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Document / Rule Name</th>
+              <th>Gate</th>
+              <th>Extracted Value</th>
+              <th>Verification Source</th>
+              <th>Status</th>
+              <th>Score Contribution</th>
+            </tr>
+          </thead>
+          <tbody id="compliance-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Inspector Slide-Over Panel -->
+    <div class="detail-drawer" id="detail-drawer">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-4);border-bottom:1px solid var(--border-subtle);padding-bottom:var(--space-3);">
+        <div style="font-size:var(--text-sm);font-weight:var(--fw-bold);color:var(--text-primary);text-transform:uppercase;letter-spacing:0.05em;">
+          Rule Deep Dive
+        </div>
+        <span class="badge badge-verified" id="drawer-status-badge">VERIFIED</span>
+      </div>
+
+      <div id="drawer-content">
+        <h4 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);margin-bottom:var(--space-1);" id="drawer-rule-title">
+          GST Certificate Verification
+        </h4>
+        <div style="font-size:var(--text-xs);color:var(--text-muted);margin-bottom:var(--space-4);" id="drawer-rule-doc">
+          File: GST_Certificate_2026.pdf (SHA: 0x9a8f...1c)
+        </div>
+
+        <!-- Cross Verification Comparison Box -->
+        <div style="background:var(--bg-elevated);border-radius:var(--radius-md);padding:var(--space-3);margin-bottom:var(--space-4);">
+          <div style="font-size:11px;font-weight:var(--fw-bold);color:var(--text-muted);text-transform:uppercase;margin-bottom:var(--space-2);">Cross-Verification Comparison</div>
+          
+          <div style="margin-bottom:var(--space-2);">
+            <div style="font-size:10px;color:var(--text-secondary);">BIDDER EXTRACTED VALUE (OCR 99%):</div>
+            <div style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--text-primary);" id="drawer-extracted">27AABCU9603R1ZM • ABC Technologies Pvt Ltd</div>
+          </div>
+
+          <div>
+            <div style="font-size:10px;color:var(--text-secondary);">GOVERNMENT SOURCE (GSTN API LIVE):</div>
+            <div style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--accent-mint);" id="drawer-source">27AABCU9603R1ZM • ACTIVE • Tax Regular</div>
+          </div>
+        </div>
+
+        <!-- Discrepancy Note (if any) -->
+        <div id="drawer-disc-box" style="display:none;background:rgba(255,92,108,0.1);border:1px solid var(--accent-coral);border-radius:var(--radius-md);padding:var(--space-3);margin-bottom:var(--space-4);">
+          <div style="font-size:11px;font-weight:var(--fw-bold);color:var(--accent-coral);margin-bottom:2px;">⚠ Discrepancy Flagged</div>
+          <div style="font-size:var(--text-xs);color:var(--text-primary);" id="drawer-disc-text"></div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display:flex;flex-direction:column;gap:var(--space-2);margin-top:var(--space-6);">
+          <a href="evidence.html" class="btn btn-primary" style="justify-content:center;font-size:var(--text-xs);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            Inspect Node Evidence Chain
+          </a>
+          <button class="btn btn-secondary" style="justify-content:center;font-size:var(--text-xs);" onclick="sendClarification()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Send Clarification Request
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/officer.js"></script>
+<script>
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  Navigation.injectShell('officer', 'Compliance', [
+    { label: 'Tenders', href: 'tenders.html' },
+    { label: 'T-2026-001', href: 'tenders.html' },
+    { label: 'Bidders', href: 'bidders.html' },
+    { label: 'ABC Technologies', href: 'compliance.html' },
+    { label: 'Compliance Audit' }
+  ]);
+
+  const RULES_DATA = [
+    { name: 'GST Certificate', status: 'verified', mandatory: true, score: '+15 pts', ext: '27AABCU9603R1ZM (Active)', src: 'GST Portal API (Live Match)', doc: 'GST_Cert_2026.pdf', disc: '' },
+    { name: 'Udyam/MSME Certificate', status: 'verified', mandatory: false, score: '+10 pts', ext: 'UDYAM-DL-01-0089123 (Micro)', src: 'Udyam National Portal (Active)', doc: 'Udyam_MSME.pdf', disc: '' },
+    { name: 'PAN Card', status: 'verified', mandatory: true, score: '+10 pts', ext: 'AABCU9603R (Valid)', src: 'Income Tax PAN API', doc: 'PAN_Copy.pdf', disc: '' },
+    { name: 'Income Tax Return (ITR)', status: 'review_required', mandatory: true, score: '+6 pts', ext: 'AY 2023-24 Filed (AY 24-25 Pending)', src: 'IT Portal Verification', doc: 'ITR_Acknowledgment.pdf', disc: 'ITR for AY 2024-25 not yet filed. Clarification required.' },
+    { name: 'OEM Authorization', status: 'non_compliant', mandatory: true, score: '-20 pts', ext: 'PO #99102 Uploaded instead of MAF', src: 'OEM Direct Domain Check', doc: 'OEM_Letter.pdf', disc: 'Uploaded file is a Purchase Order, not an OEM Manufacturer Authorization Certificate!' },
+    { name: 'EPFO Registration', status: 'verified', mandatory: true, score: '+5 pts', ext: 'DLCPM0019283000 (Active)', src: 'EPFO Unified Portal', doc: 'EPFO_Challan.pdf', disc: '' },
+    { name: 'ESIC Registration', status: 'verified', mandatory: true, score: '+5 pts', ext: '11000293810001001 (Active)', src: 'ESIC Portal Sync', doc: 'ESIC_Copy.pdf', disc: '' },
+    { name: 'Local Content Declaration', status: 'review_required', mandatory: true, score: '-7 pts', ext: 'Declared Local Content: 18.2%', src: 'Tender Rule Policy Engine', doc: 'MII_Declaration.pdf', disc: 'Declared local content is 18.2% which is below the mandatory 20% Class II threshold.' },
+    { name: 'BIS / ISO Certificate', status: 'verified', mandatory: false, score: '+10 pts', ext: 'ISO 9001:2015 Valid', src: 'BIS Central Repository', doc: 'ISO_Certificate.pdf', disc: '' },
+    { name: 'Startup India Certificate', status: 'verified', mandatory: false, score: '+5 pts', ext: 'DIPP-89120 Valid', src: 'DPIIT Portal API', doc: 'DPIIT_Cert.pdf', disc: '' },
+    { name: 'NSIC Registration', status: 'verified', mandatory: false, score: '+5 pts', ext: 'NSIC/GP/DEL/2024/091', src: 'NSIC Database', doc: 'NSIC_Cert.pdf', disc: '' },
+    { name: 'MCA Incorporation', status: 'verified', mandatory: true, score: '+5 pts', ext: 'CIN: U72200DL2018PTC334567', src: 'MCA21 Database', doc: 'COI_Certificate.pdf', disc: '' },
+    { name: 'Non-Blacklisting Affidavit', status: 'verified', mandatory: true, score: '+5 pts', ext: 'Notarized Stamp Paper #AB9910', src: 'Central Vigilance Registry', doc: 'Affidavit.pdf', disc: '' },
+    { name: 'Financial Turnover CA Cert', status: 'verified', mandatory: true, score: '+5 pts', ext: 'Avg ₹4.8 Cr (3 Yrs)', src: 'UDIN Verified (ICAI)', doc: 'CA_Turnover.pdf', disc: '' },
+  ];
+
+  let selectedIndex = 0;
+
+  function renderTable(query = '') {
+    const tbody = document.getElementById('compliance-tbody');
+    let list = RULES_DATA;
+    if (query) {
+      const q = query.toLowerCase();
+      list = list.filter(r => r.name.toLowerCase().includes(q) || r.ext.toLowerCase().includes(q));
+    }
+
+    tbody.innerHTML = list.map((r, i) => {
+      const isSel = i === selectedIndex;
+      const statusBadge = Utils.statusToBadge(r.status);
+      const scoreColor = r.score.startsWith('+') ? 'var(--accent-mint)' : 'var(--accent-coral)';
+
+      return `
+        <tr class="requirement-row ${isSel ? 'selected' : ''}" onclick="selectRow(${i})">
+          <td>
+            <div style="font-weight:var(--fw-semibold);color:var(--text-primary);">${r.name}</div>
+            <div style="font-size:11px;color:var(--text-muted);">${r.doc}</div>
+          </td>
+          <td>
+            <span class="badge ${r.mandatory ? 'badge-critical' : 'badge-pending'}" style="font-size:10px;">
+              ${r.mandatory ? 'Mandatory' : 'Scored'}
+            </span>
+          </td>
+          <td style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-primary);">${r.ext}</td>
+          <td style="font-size:var(--text-xs);color:var(--text-secondary);">${r.src}</td>
+          <td><span class="badge ${statusBadge}">${r.status.replace('_', ' ').toUpperCase()}</span></td>
+          <td style="font-family:var(--font-mono);font-weight:var(--fw-bold);color:${scoreColor};">${r.score}</td>
+        </tr>
+      `;
+    }).join('');
+
+    updateDrawer(RULES_DATA[selectedIndex]);
+  }
+
+  function selectRow(i) {
+    selectedIndex = i;
+    renderTable(document.getElementById('table-search').value);
+  }
+
+  function updateDrawer(r) {
+    if (!r) return;
+    document.getElementById('drawer-rule-title').textContent = r.name;
+    document.getElementById('drawer-rule-doc').textContent = 'File: ' + r.doc;
+    document.getElementById('drawer-extracted').textContent = r.ext;
+    document.getElementById('drawer-source').textContent = r.src;
+    
+    const badge = document.getElementById('drawer-status-badge');
+    badge.className = 'badge ' + Utils.statusToBadge(r.status);
+    badge.textContent = r.status.replace('_', ' ').toUpperCase();
+
+    const discBox = document.getElementById('drawer-disc-box');
+    if (r.disc) {
+      discBox.style.display = 'block';
+      document.getElementById('drawer-disc-text').textContent = r.disc;
+    } else {
+      discBox.style.display = 'none';
+    }
+  }
+
+  function switchBidder(id) {
+    if (id === 'BID-002') {
+      window.location.href = 'compliance.html?bidder=BID-002';
+    } else {
+      window.location.href = 'compliance.html?bidder=' + id;
+    }
+  }
+
+  function sendClarification() {
+    Toast.info('Clarification Request', 'Opening Clarification Dispatcher for ' + RULES_DATA[selectedIndex].name);
+    setTimeout(() => {
+      window.location.href = 'discrepancies.html?bidder=BID-001';
+    }, 600);
+  }
+
+  document.getElementById('table-search').addEventListener('input', e => {
+    renderTable(e.target.value);
+  });
+
+  renderTable();
+</script>
+</body>
+</html>

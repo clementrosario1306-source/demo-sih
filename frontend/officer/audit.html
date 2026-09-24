@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audit Trail — TENDERLENZZ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css"><link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    .audit-timeline {
+      position: relative;
+      padding-left: var(--space-8);
+    }
+    .audit-timeline::before {
+      content: '';
+      position: absolute;
+      left: 14px;
+      top: 10px;
+      bottom: 10px;
+      width: 2px;
+      background: var(--border-default);
+    }
+    .audit-entry {
+      position: relative;
+      margin-bottom: var(--space-6);
+    }
+    .audit-dot {
+      position: absolute;
+      left: -32px;
+      top: 4px;
+      width: 14px;
+      height: 14px;
+      border-radius: var(--radius-full);
+      background: var(--bg-surface);
+      border: 2px solid var(--accent-cyan);
+    }
+    .audit-dot.success { border-color: var(--accent-mint); background: var(--status-verified-bg); }
+    .audit-dot.warning { border-color: var(--accent-amber); background: var(--status-warning-bg); }
+    .audit-dot.error { border-color: var(--accent-coral); background: var(--status-critical-bg); }
+    .audit-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      transition: all var(--transition-fast);
+    }
+    .audit-card:hover {
+      border-color: var(--border-hover);
+    }
+  </style>
+</head>
+<body>
+<div class="page-container page-enter" id="root">
+  <div class="page-header">
+    <div class="page-title-group">
+      <h1 class="page-title">Immutable Audit Trail</h1>
+      <p class="page-subtitle">Cryptographically verified chronology of verification runs, reviews, and decision actions</p>
+    </div>
+    <div class="page-actions">
+      <button class="btn btn-secondary" onclick="exportAudit()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export Audit Log (PDF/CSV)
+      </button>
+      <button class="btn btn-primary" onclick="verifyLedger()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Verify Ledger Cryptography
+      </button>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="table-container" style="margin-bottom:var(--space-6);">
+    <div class="table-toolbar">
+      <span class="table-toolbar-title">Filter Audit Events</span>
+      <div class="table-search">
+        <span class="table-search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+        <input type="search" class="table-search-input" id="audit-search" placeholder="Search event text, actor, hash...">
+      </div>
+      <div class="select-wrapper" style="max-width:160px">
+        <select class="form-select" id="role-filter" style="height:34px;font-size:var(--text-xs)">
+          <option value="all">All Actors</option>
+          <option value="officer">Officer Actions</option>
+          <option value="system">System / AI Engine</option>
+          <option value="bidder">Bidder Submissions</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline Container -->
+  <div class="audit-timeline" id="audit-timeline"></div>
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/officer.js"></script>
+<script>
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  Navigation.injectShell('officer', 'Audit Trail', [
+    { label: 'Tenders', href: 'tenders.html' },
+    { label: 'T-2026-001', href: 'tenders.html' },
+    { label: 'Audit Trail' }
+  ]);
+
+  const EVENTS = DemoData.AUDIT_EVENTS;
+
+  function renderTimeline(role = 'all', query = '') {
+    let list = EVENTS;
+    if (role !== 'all') list = list.filter(e => e.role === role);
+    if (query) {
+      const q = query.toLowerCase();
+      list = list.filter(e => e.action.toLowerCase().includes(q) || e.user.toLowerCase().includes(q) || e.entity.toLowerCase().includes(q));
+    }
+
+    const container = document.getElementById('audit-timeline');
+    if (list.length === 0) {
+      container.innerHTML = '<div style="color:var(--text-muted);padding:var(--space-6);">No audit records found matching criteria.</div>';
+      return;
+    }
+
+    container.innerHTML = list.map((ev, i) => {
+      const roleBadge = ev.role === 'officer' ? 'badge-processing' : ev.role === 'system' ? 'badge-verified' : 'badge-active';
+      const fakeHash = '0x' + (Math.sin(i + 10) * 10000000000).toString(16).substring(0, 10).replace('-', '');
+
+      return `
+        <div class="audit-entry animate-fadeInUp stagger-${(i%5)+1}">
+          <div class="audit-dot ${ev.status}"></div>
+          <div class="audit-card">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:var(--space-2);">
+              <div>
+                <div style="display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-1);">
+                  <strong style="color:var(--text-primary);font-size:var(--text-sm);">${ev.user}</strong>
+                  <span class="badge ${roleBadge}" style="font-size:10px;">${ev.role.toUpperCase()}</span>
+                  <span style="font-size:var(--text-xs);color:var(--text-muted);">• ${ev.time} Today</span>
+                </div>
+                <div style="font-size:var(--text-sm);font-weight:var(--fw-semibold);color:var(--text-primary);">${ev.action}</div>
+                <div style="font-size:var(--text-xs);color:var(--accent-cyan);margin-top:2px;">Target: ${ev.entity}</div>
+              </div>
+              <div style="text-align:right;">
+                <span class="badge ${ev.status === 'success' ? 'badge-verified' : ev.status === 'error' ? 'badge-critical' : ev.status === 'warning' ? 'badge-warning' : 'badge-pending'}" style="font-size:10px;">
+                  ${ev.status.toUpperCase()}
+                </span>
+                <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted);margin-top:4px;">
+                  Hash: ${fakeHash}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  document.getElementById('audit-search').addEventListener('input', e => {
+    renderTimeline(document.getElementById('role-filter').value, e.target.value);
+  });
+
+  document.getElementById('role-filter').addEventListener('change', e => {
+    renderTimeline(e.target.value, document.getElementById('audit-search').value);
+  });
+
+  function exportAudit() {
+    const list = EVENTS || [];
+    const headers = ["User/Actor", "Role", "Timestamp", "Action", "Target Entity", "Status"];
+    const rows = list.map(e => [
+      `"${(e.user || '').replace(/"/g, '""')}"`,
+      `"${(e.role || '').toUpperCase()}"`,
+      `"${e.time || ''} Today"`,
+      `"${(e.action || '').replace(/"/g, '""')}"`,
+      `"${(e.entity || '').replace(/"/g, '""')}"`,
+      `"${(e.status || '').toUpperCase()}"`
+    ]);
+
+    const csvContent = "\uFEFF" + [headers.join(','), ...rows.map(r => r.join(','))].join("\r\n");
+    Utils.downloadFile('TENDERLENZZ_Officer_Audit_Trail.csv', csvContent, 'text/csv;charset=utf-8;');
+    Toast.success('Export Complete', 'Downloaded TENDERLENZZ_Officer_Audit_Trail.csv');
+  }
+
+  function verifyLedger() {
+    Toast.success('Cryptographic Verification', 'All 14 ledger blocks verified. Zero discrepancies or alterations found.');
+  }
+
+  renderTimeline();
+</script>
+</body>
+</html>

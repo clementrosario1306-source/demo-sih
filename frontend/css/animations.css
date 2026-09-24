@@ -1,0 +1,268 @@
+/* ============================================================
+   GOVNEXA — Animations & Micro-interactions
+   ============================================================ */
+
+/* ── Keyframes ───────────────────────────────────────────── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideOutRight {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(24px); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes dotPulse {
+  0%   { transform: scale(1); opacity: 1; }
+  50%  { transform: scale(1.5); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes progressPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(153, 119, 92, 0.4); }
+  70%  { box-shadow: 0 0 0 8px rgba(153, 119, 92, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(153, 119, 92, 0); }
+}
+
+@keyframes borderGlow {
+  0%   { border-color: var(--border-accent); }
+  50%  { border-color: var(--accent-cyan); }
+  100% { border-color: var(--border-accent); }
+}
+
+@keyframes countUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* ── Animation Utilities ─────────────────────────────────── */
+.animate-fadeIn    { animation: fadeIn 0.3s ease forwards; }
+.animate-fadeInUp  { animation: fadeInUp 0.4s ease forwards; }
+.animate-fadeInDown { animation: fadeInDown 0.3s ease forwards; }
+.animate-scaleIn   { animation: scaleIn 0.25s var(--transition-spring) forwards; }
+.animate-slideInRight { animation: slideInRight 0.35s ease forwards; }
+
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.10s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.20s; }
+.stagger-5 { animation-delay: 0.25s; }
+.stagger-6 { animation-delay: 0.30s; }
+
+/* ── Processing Dot ──────────────────────────────────────── */
+.processing-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  animation: dotPulse 1.4s ease-in-out infinite;
+  display: inline-block;
+}
+
+.processing-dot:nth-child(2) { animation-delay: 0.2s; }
+.processing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* ── Spinner ─────────────────────────────────────────────── */
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--border-default);
+  border-top-color: var(--accent-cyan);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+.spinner-sm {
+  width: 16px;
+  height: 16px;
+  border-width: 1.5px;
+}
+
+.spinner-lg {
+  width: 40px;
+  height: 40px;
+  border-width: 3px;
+}
+
+/* ── Shimmer Loader ──────────────────────────────────────── */
+.shimmer {
+  background: linear-gradient(90deg,
+    var(--bg-overlay) 25%,
+    var(--bg-hover) 50%,
+    var(--bg-overlay) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+
+/* ── Active Processing Animation ─────────────────────────── */
+.processing-active {
+  animation: borderGlow 1.5s ease-in-out infinite;
+}
+
+.progress-pulse {
+  animation: progressPulse 1.5s ease-in-out infinite;
+}
+
+/* ── Status Transition ───────────────────────────────────── */
+.status-transition {
+  transition: color var(--transition-slow), background var(--transition-slow), border-color var(--transition-slow);
+}
+
+/* ── Hover Lift ──────────────────────────────────────────── */
+.hover-lift {
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Hover Glow ──────────────────────────────────────────── */
+.hover-glow:hover {
+  box-shadow: var(--shadow-cyan);
+}
+
+/* ── Ping Animation (notification dot) ──────────────────── */
+.ping {
+  position: relative;
+}
+
+.ping::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--accent-coral);
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+  0%   { transform: scale(1); opacity: 0.75; }
+  75%, 100% { transform: scale(2); opacity: 0; }
+}
+
+/* ── Count Up Animation ──────────────────────────────────── */
+.count-up {
+  animation: countUp 0.5s ease forwards;
+}
+
+/* ── Tab Transition ──────────────────────────────────────── */
+.tab-panel {
+  animation: fadeIn 0.2s ease;
+}
+
+/* ── Page Transition ─────────────────────────────────────── */
+.page-enter {
+  animation: fadeInUp 0.3s ease forwards;
+}
+
+/* ── Collapse Transition ─────────────────────────────────── */
+.collapse-content {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height var(--transition-slow) ease;
+}
+
+.collapse-content.open {
+  max-height: 2000px;
+}
+
+/* ── Verification Stage Animation ────────────────────────── */
+.stage-check {
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all var(--transition-spring);
+}
+
+.stage-check.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ── Evidence Chain Line Animation ───────────────────────── */
+.evidence-connector {
+  transform-origin: top;
+  transform: scaleY(0);
+  transition: transform var(--transition-slow) ease;
+}
+
+.evidence-connector.animated {
+  transform: scaleY(1);
+}
+
+/* ── Toast Animation ─────────────────────────────────────── */
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.toast {
+  animation: toastIn 0.3s var(--transition-spring) forwards;
+}
+
+/* ── Sidebar Tooltip on Collapsed ────────────────────────── */
+.sidebar.collapsed .nav-item {
+  justify-content: center;
+}
+
+/* ── Loading Overlay ─────────────────────────────────────── */
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(9, 11, 18, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-overlay);
+  border-radius: inherit;
+}
+
+/* ── Reduced Motion ──────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

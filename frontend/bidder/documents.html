@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Vault — GOVNEXA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css"><link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    .doc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: var(--space-4);
+    }
+    .doc-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all var(--transition-fast);
+    }
+    .doc-card:hover {
+      border-color: var(--accent-cyan);
+    }
+    .doc-card.action-needed {
+      border-color: var(--accent-coral);
+      background: rgba(255,92,108,0.03);
+    }
+  </style>
+</head>
+<body>
+<div class="page-container page-enter" id="root">
+  <div class="page-header">
+    <div class="page-title-group">
+      <h1 class="page-title">14-Document Statutory Compliance Vault</h1>
+      <p class="page-subtitle">Manage corporate certificates, OCR extractions, and verification readiness for ABC Technologies</p>
+    </div>
+    <div class="page-actions">
+      <button class="btn btn-secondary" onclick="exportVault()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export Vault Archive
+      </button>
+      <button class="btn btn-primary" onclick="openUploadModal('DOC-04')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Upload Replacement Document
+      </button>
+    </div>
+  </div>
+
+  <!-- Vault Health Status Bar -->
+  <div class="card" style="margin-bottom:var(--space-6);padding:var(--space-4);">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-4);">
+      <div style="display:flex;align-items:center;gap:var(--space-4);">
+        <div>
+          <div style="font-size:var(--text-xs);color:var(--text-muted);text-transform:uppercase;">Vault Completeness</div>
+          <div style="font-size:var(--text-xl);font-weight:var(--fw-bold);color:var(--accent-mint);">14 / 14 Uploaded (100%)</div>
+        </div>
+        <div style="width:1px;height:32px;background:var(--border-subtle);"></div>
+        <div>
+          <div style="font-size:var(--text-xs);color:var(--text-muted);text-transform:uppercase;">Verification Health</div>
+          <div style="font-size:var(--text-sm);color:var(--text-primary);">10 Verified • 2 In Review • <strong style="color:var(--accent-coral)">2 Action Needed</strong></div>
+        </div>
+      </div>
+      <a href="submission.html" class="btn btn-primary" style="font-size:var(--text-xs);">
+        Proceed to Tender Submission →
+      </a>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar" id="doc-filters">
+    <button class="filter-btn active" data-filter="all">All Documents (14)</button>
+    <button class="filter-btn" data-filter="action">Action Required (2)</button>
+    <button class="filter-btn" data-filter="statutory">Statutory</button>
+    <button class="filter-btn" data-filter="financial">Financial</button>
+    <button class="filter-btn" data-filter="technical">Technical</button>
+  </div>
+
+  <!-- Documents Grid -->
+  <div class="doc-grid" id="docs-container"></div>
+</div>
+
+<!-- Upload / Replace File Modal -->
+<div class="modal-backdrop" id="upload-modal" style="display:none;">
+  <div class="modal" style="max-width: 580px;">
+    <div class="modal-header">
+      <h3 class="modal-title" id="upload-modal-title">Upload & Replace Document</h3>
+      <button class="btn btn-ghost" onclick="closeUploadModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom:var(--space-4);">
+        <label class="form-label required">Target Document</label>
+        <input type="text" class="form-input" id="upload-target-name" value="OEM Authorization Form (MAF)" readonly>
+      </div>
+
+      <!-- Drag and drop zone -->
+      <div style="border:2px dashed var(--border-default);padding:var(--space-6);text-align:center;border-radius:var(--radius-lg);background:var(--bg-surface);margin-bottom:var(--space-4);cursor:pointer;" id="file-drop-zone">
+        <input type="file" id="doc-file-input" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx" style="display:none">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="1.5" style="margin:0 auto var(--space-2);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <div style="font-size:var(--text-sm);font-weight:var(--fw-semibold);color:var(--text-primary);margin-bottom:2px;">Select replacement file to upload</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:var(--space-3);">Drag & drop here or choose from computer (PDF, PNG or JPG max 25MB)</div>
+        <div style="display:flex;gap:var(--space-2);justify-content:center;flex-wrap:wrap;">
+          <button type="button" class="btn btn-primary" style="font-size:var(--text-xs);" onclick="event.stopPropagation(); document.getElementById('doc-file-input').click();">
+            Browse File from PC
+          </button>
+          <button type="button" class="btn btn-secondary" style="font-size:var(--text-xs);" onclick="event.stopPropagation(); simulateUploadAction('Dell_OEM_MAF_2026.pdf')">
+            Use Sample Dell_OEM_MAF_2026.pdf
+          </button>
+        </div>
+      </div>
+
+      <!-- Uploading OCR Progress (Hidden) -->
+      <div id="upload-progress-box" style="display:none;background:var(--bg-elevated);padding:var(--space-3);border-radius:var(--radius-md);">
+        <div style="display:flex;justify-content:space-between;font-size:11px;font-family:var(--font-mono);margin-bottom:var(--space-1);">
+          <span style="color:var(--accent-cyan);" id="up-status-text">Parsing OCR & Signature...</span>
+          <span id="up-pct">0%</span>
+        </div>
+        <div style="height:4px;background:var(--bg-base);border-radius:2px;overflow:hidden;">
+          <div id="up-bar" style="width:0%;height:100%;background:linear-gradient(90deg, var(--accent-cyan), var(--accent-mint));"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeUploadModal()">Cancel</button>
+      <button class="btn btn-primary" id="btn-save-doc" onclick="finalizeDocUpload()" disabled>Confirm & Replace File</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/bidder.js"></script>
+<script>
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  Navigation.injectShell('bidder', 'Document Vault', [{ label: 'Document Vault' }]);
+
+  let docs = BidderData.DOCUMENTS_LIST;
+
+  function renderDocs(filter = 'all') {
+    let list = docs;
+    if (filter === 'action') list = list.filter(d => d.status === 'non_compliant' || d.status === 'review_required');
+    else if (filter !== 'all') list = list.filter(d => d.category.toLowerCase() === filter.toLowerCase());
+
+    const container = document.getElementById('docs-container');
+    container.innerHTML = list.map(d => {
+      const isAction = d.status === 'non_compliant';
+      const isReview = d.status === 'review_required';
+      const statusClass = Utils.statusToBadge(d.status);
+
+      return `
+        <div class="doc-card ${isAction ? 'action-needed' : ''} animate-fadeInUp">
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:var(--space-2);">
+              <span class="badge ${d.required ? 'badge-processing' : 'badge-pending'}" style="font-size:10px;">
+                ${d.required ? 'MANDATORY' : 'OPTIONAL'}
+              </span>
+              <span class="badge ${statusClass}" style="font-size:10px;">
+                ${d.status.replace('_', ' ').toUpperCase()}
+              </span>
+            </div>
+            
+            <h4 style="font-size:var(--text-sm);font-weight:var(--fw-bold);color:var(--text-primary);margin-bottom:var(--space-1);">
+              ${d.name}
+            </h4>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:var(--space-3);">
+              File: <code style="color:var(--text-secondary);">${d.file}</code> (${d.size})
+            </div>
+
+            <div style="background:var(--bg-elevated);padding:var(--space-2) var(--space-3);border-radius:var(--radius-sm);font-size:11px;margin-bottom:var(--space-4);">
+              <span style="color:var(--text-muted);">Extracted Data: </span>
+              <span style="color:${isAction ? 'var(--accent-coral)' : isReview ? 'var(--accent-amber)' : 'var(--accent-mint)'};font-family:var(--font-mono);font-weight:var(--fw-medium);">
+                ${d.ocr}
+              </span>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:var(--space-2);border-top:1px solid var(--border-subtle);padding-top:var(--space-3);">
+            <a href="document-details.html?id=${d.id}" class="btn btn-secondary" style="flex:1;justify-content:center;font-size:var(--text-xs);padding:4px 8px;">
+              Inspect OCR
+            </a>
+            <button class="btn ${isAction ? 'btn-primary' : 'btn-ghost'}" style="flex:1;justify-content:center;font-size:var(--text-xs);padding:4px 8px;" onclick="openUploadModal('${d.id}')">
+              ${isAction ? 'Replace File' : 'Update'}
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  document.getElementById('doc-filters').addEventListener('click', e => {
+    if (e.target.classList.contains('filter-btn')) {
+      document.querySelectorAll('#doc-filters .filter-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      renderDocs(e.target.getAttribute('data-filter'));
+    }
+  });
+
+  function openUploadModal(docId) {
+    const d = docs.find(x => x.id === docId) || docs[3];
+    document.getElementById('upload-target-name').value = d.name + ' (' + d.id + ')';
+    document.getElementById('upload-progress-box').style.display = 'none';
+    document.getElementById('btn-save-doc').disabled = true;
+    document.getElementById('upload-modal').style.display = 'flex';
+  }
+
+  function closeUploadModal() {
+    document.getElementById('upload-modal').style.display = 'none';
+  }
+
+  let uploadedDocName = 'Dell_OEM_MAF_2026.pdf';
+
+  const docDropZone = document.getElementById('file-drop-zone');
+  const docFileInput = document.getElementById('doc-file-input');
+
+  if (docDropZone && docFileInput) {
+    docDropZone.addEventListener('click', (e) => {
+      if (e.target.tagName !== 'BUTTON') {
+        docFileInput.click();
+      }
+    });
+    docDropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      docDropZone.style.borderColor = 'var(--accent-cyan)';
+    });
+    docDropZone.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      docDropZone.style.borderColor = 'var(--border-default)';
+    });
+    docDropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      docDropZone.style.borderColor = 'var(--border-default)';
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        simulateUploadAction(e.dataTransfer.files[0].name);
+      }
+    });
+    docFileInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files.length > 0) {
+        simulateUploadAction(e.target.files[0].name);
+      }
+    });
+  }
+
+  function simulateUploadAction(fileName = 'Dell_OEM_MAF_2026.pdf') {
+    uploadedDocName = fileName;
+    const pBox = document.getElementById('upload-progress-box');
+    const pBar = document.getElementById('up-bar');
+    const pPct = document.getElementById('up-pct');
+    const pTxt = document.getElementById('up-status-text');
+    pBox.style.display = 'block';
+
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 10;
+      pBar.style.width = progress + '%';
+      pPct.textContent = progress + '%';
+      if (progress === 40) pTxt.textContent = `Performing OCR on ${fileName}...`;
+      if (progress === 80) pTxt.textContent = 'Validating Digital Signature & Authenticity...';
+      if (progress >= 100) {
+        clearInterval(interval);
+        pTxt.textContent = `✓ ${fileName} Verified!`;
+        document.getElementById('btn-save-doc').disabled = false;
+        Toast.success('File Processed', `${fileName} verified with 99.4% confidence.`);
+      }
+    }, 80);
+  }
+
+  function finalizeDocUpload() {
+    const d = docs.find(x => x.id === 'DOC-04');
+    if (d) {
+      d.status = 'verified';
+      d.file = uploadedDocName;
+      d.ocr = `${uploadedDocName} Authorised (Valid & Matched)`;
+    }
+    closeUploadModal();
+    renderDocs();
+    Toast.success('Vault Updated', 'Document replaced and compliance score recalculated to 98/100.');
+  }
+
+  function exportVault() {
+    const list = DOCS || [];
+    const headers = ["Doc ID", "Document Title", "Mandatory", "File Name", "Status", "OCR & Verification Proof"];
+    const rows = list.map(d => [
+      `"${d.id || ''}"`,
+      `"${(d.title || '').replace(/"/g, '""')}"`,
+      `"${d.mandatory ? 'YES' : 'NO'}"`,
+      `"${(d.file || 'Not Uploaded').replace(/"/g, '""')}"`,
+      `"${(d.status || '').toUpperCase()}"`,
+      `"${(d.ocr || '').replace(/"/g, '""')}"`
+    ]);
+
+    const csvContent = "\uFEFF" + [headers.join(','), ...rows.map(row => row.join(','))].join("\r\n");
+    Utils.downloadFile('TENDERLENZZ_Bidder_Vault_Manifest.csv', csvContent, 'text/csv;charset=utf-8;');
+    Toast.success('Vault Exported', 'Downloaded TENDERLENZZ_Bidder_Vault_Manifest.csv');
+  }
+
+  renderDocs();
+</script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bidders — GOVNEXA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css"><link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+<div class="page-container page-enter" id="root">
+  <div class="page-header">
+    <div class="page-title-group">
+      <h1 class="page-title">Bidders & Submissions</h1>
+      <p class="page-subtitle">Evaluation roster, verification scores, and compliance posture for Tender T-2026-001</p>
+    </div>
+    <div class="page-actions">
+      <a href="verification.html" class="btn btn-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Verification Engine
+      </a>
+      <button class="btn btn-primary" id="btn-compare" onclick="compareSelected()" disabled>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+        Compare Selected (0)
+      </button>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar" id="bidder-filters">
+    <button class="filter-btn active" data-filter="all">All Bidders <span style="opacity:0.7">(5)</span></button>
+    <button class="filter-btn" data-filter="low_risk">Low Risk (90+)</button>
+    <button class="filter-btn" data-filter="under_review">Under Review</button>
+    <button class="filter-btn" data-filter="high_risk">High / Critical Risk</button>
+    <button class="filter-btn" data-filter="msme">MSME / Startups</button>
+  </div>
+
+  <!-- Bidder Table -->
+  <div class="table-container">
+    <div class="table-toolbar">
+      <span class="table-toolbar-title">Submissions (5 Bids Received)</span>
+      <div class="table-search">
+        <span class="table-search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+        <input type="search" class="table-search-input" id="bidder-search" placeholder="Search bidder name, ID, or score...">
+      </div>
+      <div class="select-wrapper" style="max-width:180px">
+        <select class="form-select" id="sort-bidders" style="height:34px;font-size:var(--text-xs)">
+          <option value="score_desc">Highest Score</option>
+          <option value="score_asc">Lowest Score</option>
+          <option value="name">Company Name</option>
+          <option value="time">Submission Time</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="data-table" id="bidders-table">
+        <thead>
+          <tr>
+            <th style="width:40px">
+              <input type="checkbox" id="select-all" onclick="toggleSelectAll(this)">
+            </th>
+            <th>Bidder & Organization</th>
+            <th>Bid ID</th>
+            <th>Docs Uploaded</th>
+            <th>Tags / Incentives</th>
+            <th>Compliance Score</th>
+            <th>Risk Level</th>
+            <th>Status</th>
+            <th style="width:140px">Action</th>
+          </tr>
+        </thead>
+        <tbody id="bidders-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/officer.js"></script>
+<script>
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  Navigation.injectShell('officer', 'Bidders', [
+    { label: 'Tenders', href: 'tenders.html' },
+    { label: 'T-2026-001', href: 'tenders.html' },
+    { label: 'Bidders' }
+  ]);
+
+  let bidders = DemoData.BIDDERS;
+  let selectedBids = new Set();
+  let currentFilter = 'all';
+
+  function renderBidders(filter = 'all', search = '') {
+    let list = [...bidders];
+    if (filter === 'low_risk') list = list.filter(b => b.risk === 'low' || b.score >= 90);
+    else if (filter === 'under_review') list = list.filter(b => b.status === 'under_review');
+    else if (filter === 'high_risk') list = list.filter(b => b.risk === 'high' || b.risk === 'critical');
+    else if (filter === 'msme') list = list.filter(b => b.msme || b.startup || b.nsic);
+
+    if (search) {
+      const q = search.toLowerCase();
+      list = list.filter(b => b.name.toLowerCase().includes(q) || b.id.toLowerCase().includes(q));
+    }
+
+    const sort = document.getElementById('sort-bidders').value;
+    if (sort === 'score_desc') list.sort((a,b) => b.score - a.score);
+    else if (sort === 'score_asc') list.sort((a,b) => a.score - b.score);
+    else if (sort === 'name') list.sort((a,b) => a.name.localeCompare(b.name));
+
+    const tbody = document.getElementById('bidders-tbody');
+    tbody.innerHTML = list.map(b => {
+      const isSelected = selectedBids.has(b.id);
+      const riskClass = Utils.riskToBadge(b.risk);
+      const scoreColor = b.score >= 80 ? 'var(--accent-mint)' : b.score >= 60 ? 'var(--accent-amber)' : 'var(--accent-coral)';
+
+      return `
+        <tr class="${isSelected ? 'selected-row' : ''}">
+          <td>
+            <input type="checkbox" class="bidder-chk" value="${b.id}" ${isSelected ? 'checked' : ''} onchange="onBidSelect(this, '${b.id}')">
+          </td>
+          <td>
+            <div style="display:flex;align-items:center;gap:var(--space-3);">
+              <div class="bidder-avatar-sm">${Utils.initials(b.name)}</div>
+              <div>
+                <a href="compliance.html?bidder=${b.id}" style="font-weight:var(--fw-semibold);color:var(--text-primary);text-decoration:none;">${b.name}</a>
+                <div style="font-size:var(--text-xs);color:var(--text-secondary);">Sub: ${b.submitted.replace('T', ' ')}</div>
+              </div>
+            </div>
+          </td>
+          <td><code>${b.id}</code></td>
+          <td>
+            <span class="badge ${b.docsComplete === 14 ? 'badge-verified' : 'badge-warning'}">
+              ${b.docsComplete}/14 Files
+            </span>
+          </td>
+          <td>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;">
+              ${b.msme ? '<span class="badge badge-verified" style="font-size:10px;">MSME</span>' : ''}
+              ${b.nsic ? '<span class="badge badge-processing" style="font-size:10px;">NSIC</span>' : ''}
+              ${b.startup ? '<span class="badge badge-active" style="font-size:10px;">Startup</span>' : ''}
+              ${!b.msme && !b.nsic && !b.startup ? '<span style="color:var(--text-muted);font-size:11px;">General</span>' : ''}
+            </div>
+          </td>
+          <td>
+            <div style="display:flex;align-items:center;gap:var(--space-2);">
+              <div style="font-family:var(--font-mono);font-size:var(--text-base);font-weight:var(--fw-bold);color:${scoreColor};">${b.score}</div>
+              <div style="width:50px;height:4px;background:var(--bg-elevated);border-radius:2px;overflow:hidden;">
+                <div style="width:${b.score}%;height:100%;background:${scoreColor};"></div>
+              </div>
+            </div>
+          </td>
+          <td><span class="badge ${riskClass}">${b.risk.toUpperCase()}</span></td>
+          <td>
+            <span class="badge ${b.status === 'verified' ? 'badge-verified' : 'badge-warning'}">
+              ${b.status.replace('_', ' ').toUpperCase()}
+            </span>
+          </td>
+          <td>
+            <div style="display:flex;gap:var(--space-2);">
+              <a href="compliance.html?bidder=${b.id}" class="btn btn-secondary" style="padding:4px 10px;font-size:var(--text-xs);">
+                Evaluate
+              </a>
+              <a href="evidence.html?bidder=${b.id}" class="btn btn-ghost" style="padding:4px 8px;font-size:var(--text-xs);" title="Evidence Chain">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              </a>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function onBidSelect(cb, id) {
+    if (cb.checked) selectedBids.add(id);
+    else selectedBids.delete(id);
+    updateCompareBtn();
+  }
+
+  function toggleSelectAll(master) {
+    const chks = document.querySelectorAll('.bidder-chk');
+    chks.forEach(c => {
+      c.checked = master.checked;
+      if (master.checked) selectedBids.add(c.value);
+      else selectedBids.delete(c.value);
+    });
+    updateCompareBtn();
+  }
+
+  function updateCompareBtn() {
+    const btn = document.getElementById('btn-compare');
+    btn.disabled = selectedBids.size < 2;
+    btn.innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+      Compare Selected (${selectedBids.size})
+    `;
+  }
+
+  function compareSelected() {
+    if (selectedBids.size < 2) return;
+    const ids = Array.from(selectedBids).join(',');
+    window.location.href = `comparison.html?bidders=${ids}`;
+  }
+
+  document.getElementById('bidder-filters').addEventListener('click', e => {
+    if (e.target.classList.contains('filter-btn')) {
+      document.querySelectorAll('#bidder-filters .filter-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      currentFilter = e.target.getAttribute('data-filter');
+      renderBidders(currentFilter, document.getElementById('bidder-search').value);
+    }
+  });
+
+  document.getElementById('bidder-search').addEventListener('input', e => {
+    renderBidders(currentFilter, e.target.value);
+  });
+
+  document.getElementById('sort-bidders').addEventListener('change', () => {
+    renderBidders(currentFilter, document.getElementById('bidder-search').value);
+  });
+
+  renderBidders();
+</script>
+</body>
+</html>

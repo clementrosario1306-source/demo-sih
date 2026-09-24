@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Command Center — GOVNEXA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css"><link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+<div class="page-container page-enter" id="root">
+  
+  <!-- Welcome Banner -->
+  <div class="welcome-banner">
+    <div class="welcome-text">
+      <div class="welcome-greeting">System Administration Console</div>
+      <div class="welcome-role">
+        <span class="badge badge-processing">Dr. Vikram Sethi</span>
+        <span>•</span>
+        <span>National Informatics Centre (NIC) • Platform Administrator</span>
+      </div>
+      <div style="margin-top:var(--space-3);font-size:var(--text-sm);color:var(--text-muted);">
+        System Version: <code style="color:var(--text-primary)">v2.4.0-PROD</code> • Blockchain Anchor: Active (Block #849,201)
+      </div>
+    </div>
+    <div class="welcome-visual">
+      <div style="text-align:right;">
+        <div style="font-size:var(--text-xs);color:var(--text-muted);text-transform:uppercase;margin-bottom:var(--space-1);">Infrastructure Health</div>
+        <div style="font-size:var(--text-xl);font-weight:var(--fw-bold);font-family:var(--font-mono);color:var(--accent-mint);">100% OPERATIONAL</div>
+        <div style="font-size:var(--text-xs);color:var(--text-secondary);">6/6 Government API Gateways Online</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI Grid -->
+  <div class="kpi-grid">
+    <div class="kpi-card kpi-mint animate-fadeInUp stagger-1">
+      <div class="kpi-header">
+        <div>
+          <div class="kpi-value">6 / 6</div>
+          <div class="kpi-label">API Connectors Online</div>
+        </div>
+        <div class="kpi-icon-wrap mint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+      </div>
+      <div class="kpi-trend up" style="color:var(--accent-mint);">Avg latency: 182 ms</div>
+    </div>
+
+    <div class="kpi-card kpi-cyan animate-fadeInUp stagger-2">
+      <div class="kpi-header">
+        <div>
+          <div class="kpi-value">142</div>
+          <div class="kpi-label">Verifications Today</div>
+        </div>
+        <div class="kpi-icon-wrap cyan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        </div>
+      </div>
+      <div class="kpi-trend up">+18% vs yesterday</div>
+    </div>
+
+    <div class="kpi-card kpi-violet animate-fadeInUp stagger-3">
+      <div class="kpi-header">
+        <div>
+          <div class="kpi-value">38</div>
+          <div class="kpi-label">Active Rule Definitions</div>
+        </div>
+        <div class="kpi-icon-wrap violet">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+      </div>
+      <div class="kpi-trend up">12 GFR Policy Rules</div>
+    </div>
+
+    <div class="kpi-card kpi-amber animate-fadeInUp stagger-4">
+      <div class="kpi-header">
+        <div>
+          <div class="kpi-value">128</div>
+          <div class="kpi-label">Total Users Managed</div>
+        </div>
+        <div class="kpi-icon-wrap amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+      </div>
+      <div class="kpi-trend up">24 Officers • 104 Bidders</div>
+    </div>
+  </div>
+
+  <!-- Connectors Health Table -->
+  <div class="table-container" style="margin-bottom:var(--space-6);">
+    <div class="table-toolbar">
+      <span class="table-toolbar-title">External Government Registry API Gateways</span>
+      <a href="connectors.html" class="btn btn-secondary" style="font-size:var(--text-xs);">Manage All Connectors</a>
+    </div>
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>API Gateway</th>
+            <th>Governing Authority</th>
+            <th>Endpoint</th>
+            <th>Latency</th>
+            <th>Uptime (30d)</th>
+            <th>Health Status</th>
+          </tr>
+        </thead>
+        <tbody id="admin-conn-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  Navigation.injectShell('admin', 'Dashboard', [{ label: 'Dashboard' }]);
+
+  const conns = AdminData.CONNECTORS;
+  document.getElementById('admin-conn-tbody').innerHTML = conns.map(c => `
+    <tr>
+      <td style="font-weight:var(--fw-semibold);color:var(--text-primary);">${c.name}</td>
+      <td style="color:var(--text-secondary);font-size:var(--text-xs);">${c.authority}</td>
+      <td><code style="font-size:11px;">${c.endpoint}</code></td>
+      <td style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--accent-mint);">${c.latency}</td>
+      <td style="font-family:var(--font-mono);font-size:var(--text-xs);">${c.uptime}</td>
+      <td><span class="badge badge-verified">HEALTHY</span></td>
+    </tr>
+  `).join('');
+</script>
+</body>
+</html>

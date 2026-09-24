@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bidder Comparison — GOVNEXA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css"><link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 240px repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--space-4);
+      align-items: stretch;
+      overflow-x: auto;
+    }
+    .compare-col {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    .compare-col.header-col {
+      background: transparent;
+      border: none;
+      padding-left: 0;
+    }
+    .compare-row-label {
+      font-size: var(--text-xs);
+      font-weight: var(--fw-semibold);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .compare-cell {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: var(--text-sm);
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+<div class="page-container page-enter" id="root">
+  <div class="page-header">
+    <div class="page-title-group">
+      <h1 class="page-title">Side-by-Side Bidder Evaluation</h1>
+      <p class="page-subtitle">Cross-comparison matrix for Tender T-2026-001 (IT Equipment Supply)</p>
+    </div>
+    <div class="page-actions">
+      <a href="bidders.html" class="btn btn-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to Bidders
+      </a>
+      <button class="btn btn-primary" onclick="window.print()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Export Evaluation Brief
+      </button>
+    </div>
+  </div>
+
+  <!-- Comparison Matrix Container -->
+  <div class="compare-grid" id="comparison-container">
+    
+    <!-- Feature / Criteria Labels Column -->
+    <div class="compare-col header-col">
+      <div style="height: 120px; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: var(--space-4);">
+        <div style="font-size: var(--text-lg); font-weight: var(--fw-bold); color: var(--text-primary);">Evaluation Criteria</div>
+        <div style="font-size: var(--text-xs); color: var(--text-secondary);">Benchmarked against Tender T-2026-001</div>
+      </div>
+      <div class="compare-row-label">Compliance Score (100 Max)</div>
+      <div class="compare-row-label">Risk Rating</div>
+      <div class="compare-row-label">Statutory Verification (GST/PAN/MCA)</div>
+      <div class="compare-row-label">OEM Authorization (MAF)</div>
+      <div class="compare-row-label">Avg Annual Turnover (Min ₹3.0 Cr)</div>
+      <div class="compare-row-label">Make in India Local Content</div>
+      <div class="compare-row-label">Labour Compliance (EPFO / ESIC)</div>
+      <div class="compare-row-label">MSME / Startup Preferences</div>
+      <div class="compare-row-label">Flagged Discrepancies</div>
+      <div class="compare-row-label">System Recommendation</div>
+      <div class="compare-row-label" style="border:none;">Detailed Actions</div>
+    </div>
+
+    <!-- Bidder 1: Global Infra Solutions -->
+    <div class="compare-col animate-fadeInUp stagger-1" style="border-top: 3px solid var(--accent-mint);">
+      <div style="height: 120px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <span class="badge badge-verified" style="font-size:10px;">Rank 1 • Benchmark</span>
+          <div style="font-size: var(--text-base); font-weight: var(--fw-bold); color: var(--text-primary); margin-top: 6px;">Global Infra Solutions</div>
+          <div style="font-size: var(--text-xs); color: var(--text-secondary);">BID-002 • Large Enterprise</div>
+        </div>
+      </div>
+      <div class="compare-cell">
+        <span style="font-family: var(--font-mono); font-size: var(--text-lg); font-weight: var(--fw-bold); color: var(--accent-mint);">91 / 100</span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-verified">LOW RISK (12%)</span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-verified">✓ 100% Passed (3/3)</span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-verified">✓ Valid & Active (HP/Dell)</span>
+      </div>
+      <div class="compare-cell">
+        <span>₹ 12.4 Cr <small style="color:var(--accent-mint);">(Exceeds)</small></span>
+      </div>
+      <div class="compare-cell">
+        <span>64% <span class="badge badge-verified" style="font-size:10px;">Class I</span></span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-verified">✓ Active & Regular</span>
+      </div>
+      <div class="compare-cell">
+        <span style="color:var(--text-muted);font-size:var(--text-xs);">None (General Category)</span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-verified">0 Discrepancies</span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-verified">RECOMMENDED QUALIFIED</span>
+      </div>
+      <div class="compare-cell" style="border:none;">
+        <a href="compliance.html?bidder=BID-002" class="btn btn-secondary" style="width:100%;justify-content:center;font-size:var(--text-xs);">View Full Audit</a>
+      </div>
+    </div>
+
+    <!-- Bidder 2: ABC Technologies Pvt Ltd (Primary Demo) -->
+    <div class="compare-col animate-fadeInUp stagger-2" style="border-top: 3px solid var(--accent-amber); background: var(--bg-elevated);">
+      <div style="height: 120px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <span class="badge badge-warning" style="font-size:10px;">Rank 2 • In Review</span>
+          <div style="font-size: var(--text-base); font-weight: var(--fw-bold); color: var(--text-primary); margin-top: 6px;">ABC Technologies Pvt Ltd</div>
+          <div style="font-size: var(--text-xs); color: var(--text-secondary);">BID-001 • MSME / NSIC</div>
+        </div>
+      </div>
+      <div class="compare-cell">
+        <span style="font-family: var(--font-mono); font-size: var(--text-lg); font-weight: var(--fw-bold); color: var(--accent-amber);">78 / 100</span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-warning">MEDIUM RISK (42%)</span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-warning">⚠ Name Discrepancy</span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-critical">✕ Missing / PO Uploaded</span>
+      </div>
+      <div class="compare-cell">
+        <span>₹ 4.8 Cr <small style="color:var(--accent-mint);">(Met)</small></span>
+      </div>
+      <div class="compare-cell">
+        <span style="color:var(--accent-coral);">18% <span class="badge badge-critical" style="font-size:10px;">Below 20%</span></span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-verified">✓ Active & Regular</span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-verified">MSME + NSIC Exemptions</span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-critical">3 Issues (1 Critical)</span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-warning">CLARIFICATION MANDATORY</span>
+      </div>
+      <div class="compare-cell" style="border:none;">
+        <a href="compliance.html?bidder=BID-001" class="btn btn-primary" style="width:100%;justify-content:center;font-size:var(--text-xs);">Inspect Compliance</a>
+      </div>
+    </div>
+
+    <!-- Bidder 3: Techno Build Ltd -->
+    <div class="compare-col animate-fadeInUp stagger-3" style="border-top: 3px solid var(--accent-cyan);">
+      <div style="height: 120px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <span class="badge badge-processing" style="font-size:10px;">Rank 3 • Validated</span>
+          <div style="font-size: var(--text-base); font-weight: var(--fw-bold); color: var(--text-primary); margin-top: 6px;">Techno Build Ltd</div>
+          <div style="font-size: var(--text-xs); color: var(--text-secondary);">BID-004 • NSIC Registered</div>
+        </div>
+      </div>
+      <div class="compare-cell">
+        <span style="font-family: var(--font-mono); font-size: var(--text-lg); font-weight: var(--fw-bold); color: var(--accent-cyan);">82 / 100</span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-processing">MODERATE (28%)</span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-verified">✓ 100% Passed</span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-verified">✓ Valid MAF (Lenovo)</span>
+      </div>
+      <div class="compare-cell">
+        <span>₹ 5.1 Cr <small style="color:var(--accent-mint);">(Met)</small></span>
+      </div>
+      <div class="compare-cell">
+        <span>35% <span class="badge badge-processing" style="font-size:10px;">Class II</span></span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-verified">✓ Active & Regular</span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-processing">NSIC Certificate</span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-warning">2 Minor Warnings</span>
+      </div>
+      <div class="compare-cell">
+        <span class="badge badge-verified">ELIGIBLE FOR FINANCIAL BID</span>
+      </div>
+      <div class="compare-cell" style="border:none;">
+        <a href="compliance.html?bidder=BID-004" class="btn btn-secondary" style="width:100%;justify-content:center;font-size:var(--text-xs);">View Full Audit</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/officer.js"></script>
+<script>
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  Navigation.injectShell('officer', 'Comparison', [
+    { label: 'Tenders', href: 'tenders.html' },
+    { label: 'Bidders', href: 'bidders.html' },
+    { label: 'Side-by-Side Comparison' }
+  ]);
+</script>
+</body>
+</html>

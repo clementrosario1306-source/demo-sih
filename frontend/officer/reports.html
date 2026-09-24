@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports & Exports — TENDERLENZZ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css"><link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    .report-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-4);
+      transition: all var(--transition-normal);
+    }
+    .report-card:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+<div class="page-container page-enter" id="root">
+  <div class="page-header">
+    <div class="page-title-group">
+      <h1 class="page-title">Executive Reports & Compliance Packs</h1>
+      <p class="page-subtitle">Generate, preview, and download official procurement evaluation dossiers and audit summaries</p>
+    </div>
+    <div class="page-actions">
+      <button class="btn btn-primary" onclick="openCustomReportModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Build Custom Report
+      </button>
+    </div>
+  </div>
+
+  <!-- Standard Pre-Built Reports Grid -->
+  <h3 style="font-size:var(--text-sm);font-weight:var(--fw-bold);color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:var(--space-4);">
+    Standard Statutory Compliance Packages
+  </h3>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:var(--space-5);margin-bottom:var(--space-8);">
+    
+    <!-- Report 1 -->
+    <div class="report-card animate-fadeInUp stagger-1">
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-2);">
+          <span class="badge badge-verified">EXECUTIVE BRIEF</span>
+          <span style="font-size:11px;color:var(--text-muted);">PDF • 14 Pages</span>
+        </div>
+        <h4 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);margin-bottom:var(--space-2);">
+          Technical Evaluation & Award Readiness Dossier
+        </h4>
+        <p style="font-size:var(--text-xs);color:var(--text-secondary);line-height:1.5;">
+          Complete comparative ranking of 5 bidders for T-2026-001, compliance scores, risk matrices, and committee recommendations.
+        </p>
+      </div>
+      <div style="display:flex;gap:var(--space-2);border-top:1px solid var(--border-subtle);padding-top:var(--space-3);">
+        <button class="btn btn-secondary" style="flex:1;font-size:var(--text-xs);justify-content:center;" onclick="previewReport('Technical Evaluation Dossier')">Preview</button>
+        <button class="btn btn-primary" style="flex:1;font-size:var(--text-xs);justify-content:center;" onclick="downloadReport('Technical_Evaluation_T2026-001.pdf')">Download PDF</button>
+      </div>
+    </div>
+
+    <!-- Report 2 -->
+    <div class="report-card animate-fadeInUp stagger-2">
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-2);">
+          <span class="badge badge-warning">DISCREPANCY DOSSIER</span>
+          <span style="font-size:11px;color:var(--text-muted);">PDF / CSV</span>
+        </div>
+        <h4 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);margin-bottom:var(--space-2);">
+          Discrepancies & Clarification Log Report
+        </h4>
+        <p style="font-size:var(--text-xs);color:var(--text-secondary);line-height:1.5;">
+          Comprehensive breakdown of 6 flagged variances across bidders, OEM issues, MII local content deficits, and officer overrides.
+        </p>
+      </div>
+      <div style="display:flex;gap:var(--space-2);border-top:1px solid var(--border-subtle);padding-top:var(--space-3);">
+        <button class="btn btn-secondary" style="flex:1;font-size:var(--text-xs);justify-content:center;" onclick="previewReport('Discrepancy Log')">Preview</button>
+        <button class="btn btn-primary" style="flex:1;font-size:var(--text-xs);justify-content:center;" onclick="downloadReport('Discrepancy_Log_T2026-001.pdf')">Download PDF</button>
+      </div>
+    </div>
+
+    <!-- Report 3 -->
+    <div class="report-card animate-fadeInUp stagger-3">
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-2);">
+          <span class="badge badge-processing">AUDIT PACK</span>
+          <span style="font-size:11px;color:var(--text-muted);">ZIP (Cryptographic)</span>
+        </div>
+        <h4 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);margin-bottom:var(--space-2);">
+          Immutable Cryptographic Audit Pack
+        </h4>
+        <p style="font-size:var(--text-xs);color:var(--text-secondary);line-height:1.5;">
+          Full blockchain-anchored ledger, SHA-256 Merkle hashes, live API response payloads, and digital signatures.
+        </p>
+      </div>
+      <div style="display:flex;gap:var(--space-2);border-top:1px solid var(--border-subtle);padding-top:var(--space-3);">
+        <button class="btn btn-secondary" style="flex:1;font-size:var(--text-xs);justify-content:center;" onclick="previewReport('Audit Ledger Pack')">Preview</button>
+        <button class="btn btn-primary" style="flex:1;font-size:var(--text-xs);justify-content:center;" onclick="downloadReport('Cryptographic_Audit_Pack.zip')">Download ZIP</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Recent Export Activity Table -->
+  <div class="table-container">
+    <div class="table-toolbar">
+      <span class="table-toolbar-title">Recent Report Generation History</span>
+    </div>
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Report Title</th>
+            <th>Tender Scope</th>
+            <th>Generated By</th>
+            <th>Generated Date</th>
+            <th>Format & Size</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:var(--fw-semibold);color:var(--text-primary);">Technical Evaluation Summary</td>
+            <td><code>T-2026-001</code></td>
+            <td>Arjun Mehta (Officer)</td>
+            <td>Today, 10:45 AM</td>
+            <td>PDF (2.4 MB)</td>
+            <td><span class="badge badge-verified">Ready</span></td>
+            <td><button class="btn btn-ghost" style="padding:4px 8px;font-size:var(--text-xs);" onclick="downloadReport('Tech_Eval_2.4MB.pdf')">Download</button></td>
+          </tr>
+          <tr>
+            <td style="font-weight:var(--fw-semibold);color:var(--text-primary);">Bidder Cross-Verification Matrix</td>
+            <td><code>T-2026-001</code></td>
+            <td>System Engine</td>
+            <td>Today, 10:32 AM</td>
+            <td>CSV (180 KB)</td>
+            <td><span class="badge badge-verified">Ready</span></td>
+            <td><button class="btn btn-ghost" style="padding:4px 8px;font-size:var(--text-xs);" onclick="downloadReport('Matrix_Export.csv')">Download</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Report Builder Modal -->
+<div class="modal-backdrop" id="custom-modal" style="display:none;">
+  <div class="modal" style="max-width: 600px;">
+    <div class="modal-header">
+      <h3 class="modal-title">Custom Report Builder</h3>
+      <button class="btn btn-ghost" onclick="closeCustomModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom:var(--space-4);">
+        <label class="form-label required">Target Tender</label>
+        <select class="form-select">
+          <option>T-2026-001 — Supply of IT Equipment</option>
+          <option>T-2026-002 — Network Infrastructure Upgrade</option>
+          <option>T-2026-003 — Smart City Sensors</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom:var(--space-4);">
+        <label class="form-label">Data Modules to Include</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2);margin-top:var(--space-2);">
+          <label class="checkbox-container"><input type="checkbox" checked> 14-Document Matrix</label>
+          <label class="checkbox-container"><input type="checkbox" checked> Score Breakdown</label>
+          <label class="checkbox-container"><input type="checkbox" checked> Discrepancy Log</label>
+          <label class="checkbox-container"><input type="checkbox" checked> External API Proofs</label>
+          <label class="checkbox-container"><input type="checkbox" checked> Officer Decision Memo</label>
+          <label class="checkbox-container"><input type="checkbox" checked> Cryptographic Hash Proof</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label required">Export Format</label>
+        <select class="form-select">
+          <option>Official Signed PDF (.pdf)</option>
+          <option>Evaluation Spreadsheet (.xlsx / .csv)</option>
+          <option>Summary Audit Dossier (.csv / .txt)</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeCustomModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="generateCustom()">Generate Report Package</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/officer.js"></script>
+<script>
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  Navigation.injectShell('officer', 'Reports', [
+    { label: 'Tenders', href: 'tenders.html' },
+    { label: 'Reports & Exports' }
+  ]);
+
+  function previewReport(title) {
+    Toast.info('Preview Loaded', 'Displaying interactive document preview for ' + title);
+  }
+
+  function downloadReport(filename) {
+    let content = `TENDERLENZZ STATUTORY COMPLIANCE DOSSIER\nGenerated: ${new Date().toLocaleString()}\nTender ID: T-2026-001\nFormat: ${filename}\nStatus: Officially Signed & Cryptographically Verified\n\n--- EXECUTIVE SUMMARY ---\nTotal Bidders Evaluated: 5\nCompliant Bidders: 4\nFlagged Variances: 1 (OEM Authorization Pending)\nTop Ranked Bidder: Apex Infotech Pvt Ltd (Score: 94/100)\n\n--- MERKLE ROOT HASH ---\nSHA256: 7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069\n`;
+    
+    if (filename.endsWith('.csv')) {
+      content = `\uFEFF"Bidder Name","Technical Score","Financial Bid (INR)","MII Content %","Blacklist Status","Award Recommendation"\n"Apex Infotech Pvt Ltd",94,"₹1,42,50,000",72%,"CLEAR","L1 Recommended"\n"Bharat Dynamics",88,"₹1,48,000,000",68%,"CLEAR","L2 Qualified"\n"CyberTech Systems",85,"₹1,51,20,000",60%,"CLEAR","L3 Qualified"\n"Delta Global Ltd",78,"₹1,55,000,000",55%,"CLEAR","L4 Qualified"\n"Echo Enterprises",42,"₹1,39,000,000",40%,"SUSPENDED","Disqualified - Invalid EMD"`;
+    }
+
+    Utils.downloadFile(filename, content, filename.endsWith('.csv') ? 'text/csv;charset=utf-8;' : 'text/plain;charset=utf-8;');
+    Toast.success('Download Complete', 'Downloaded: ' + filename);
+  }
+
+  function openCustomReportModal() {
+    document.getElementById('custom-modal').style.display = 'flex';
+  }
+
+  function closeCustomModal() {
+    document.getElementById('custom-modal').style.display = 'none';
+  }
+
+  function generateCustom() {
+    closeCustomModal();
+    const filename = `TENDERLENZZ_Custom_Evaluation_${new Date().toISOString().slice(0, 10)}.csv`;
+    const csvContent = `\uFEFF"Target Tender","Module","Verification Proof","Status"\n"T-2026-001","14-Document Matrix","SHA-256 Passed","VERIFIED"\n"T-2026-001","Score Breakdown","Weightage 100/100","CALCULATED"\n"T-2026-001","Discrepancy Log","1 Warning Overridden","RESOLVED"\n"T-2026-001","External API Proofs","MCA21 + GSTN Realtime","MATCHED"`;
+    Utils.downloadFile(filename, csvContent, 'text/csv;charset=utf-8;');
+    Toast.success('Report Compiled', 'Custom compliance dossier downloaded as ' + filename);
+  }
+</script>
+</body>
+</html>

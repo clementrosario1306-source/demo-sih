@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TENDERLENZZ</title>
+  <script>
+    // Redirect to login or role dashboard
+    const role = localStorage.getItem('govnexa_role');
+    const map = { officer: 'officer/dashboard.html', bidder: 'bidder/dashboard.html', admin: 'admin/dashboard.html' };
+    window.location.href = role && map[role] ? map[role] : 'login.html';
+  </script>
+</head>
+<body></body>
+</html>

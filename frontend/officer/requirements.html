@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Requirement Matrix — GOVNEXA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css"><link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+<div class="page-container page-enter" id="root">
+  <div class="page-header">
+    <div class="page-title-group">
+      <h1 class="page-title">Compliance Requirement Matrix</h1>
+      <p class="page-subtitle">Rule definitions, thresholds, mandatory criteria, and verification connectors for T-2026-001</p>
+    </div>
+    <div class="page-actions">
+      <button class="btn btn-secondary" onclick="exportMatrix()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export Matrix
+      </button>
+      <button class="btn btn-primary" onclick="openAddRequirementModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Requirement
+      </button>
+    </div>
+  </div>
+
+  <!-- Stat Summary Cards -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:var(--space-4);margin-bottom:var(--space-6);">
+    <div class="card" style="padding:var(--space-4);">
+      <div style="font-size:var(--text-xs);color:var(--text-muted);text-transform:uppercase;">Total Rules</div>
+      <div style="font-size:var(--text-2xl);font-weight:var(--fw-bold);color:var(--accent-cyan);margin-top:var(--space-1);" id="stat-total">12</div>
+      <div style="font-size:var(--text-xs);color:var(--text-secondary);margin-top:var(--space-1);">Extracted from RFP + Default Policy</div>
+    </div>
+    <div class="card" style="padding:var(--space-4);">
+      <div style="font-size:var(--text-xs);color:var(--text-muted);text-transform:uppercase;">Mandatory Criteria</div>
+      <div style="font-size:var(--text-2xl);font-weight:var(--fw-bold);color:var(--accent-coral);margin-top:var(--space-1);">7</div>
+      <div style="font-size:var(--text-xs);color:var(--text-secondary);margin-top:var(--space-1);">Pass/Fail Hard-Gate</div>
+    </div>
+    <div class="card" style="padding:var(--space-4);">
+      <div style="font-size:var(--text-xs);color:var(--text-muted);text-transform:uppercase;">Scored / Preferential</div>
+      <div style="font-size:var(--text-2xl);font-weight:var(--fw-bold);color:var(--accent-violet);margin-top:var(--space-1);">5</div>
+      <div style="font-size:var(--text-xs);color:var(--text-secondary);margin-top:var(--space-1);">Contributes to 100 pt Index</div>
+    </div>
+    <div class="card" style="padding:var(--space-4);">
+      <div style="font-size:var(--text-xs);color:var(--text-muted);text-transform:uppercase;">Automated API Connectors</div>
+      <div style="font-size:var(--text-2xl);font-weight:var(--fw-bold);color:var(--accent-mint);margin-top:var(--space-1);">8</div>
+      <div style="font-size:var(--text-xs);color:var(--text-secondary);margin-top:var(--space-1);">Zero manual validation needed</div>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar" id="category-filters">
+    <button class="filter-btn active" data-cat="all">All Categories</button>
+    <button class="filter-btn" data-cat="Statutory">Statutory</button>
+    <button class="filter-btn" data-cat="Technical">Technical</button>
+    <button class="filter-btn" data-cat="Financial">Financial</button>
+    <button class="filter-btn" data-cat="Labour">Labour</button>
+    <button class="filter-btn" data-cat="Policy">Policy / MII</button>
+    <button class="filter-btn" data-cat="MSME">MSME</button>
+    <button class="filter-btn" data-cat="Corporate">Corporate</button>
+  </div>
+
+  <!-- Requirement Table -->
+  <div class="table-container">
+    <div class="table-toolbar">
+      <span class="table-toolbar-title">Active Rules for T-2026-001</span>
+      <div class="table-search">
+        <span class="table-search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+        <input type="search" class="table-search-input" id="req-search" placeholder="Search requirement name, threshold, method...">
+      </div>
+      <div class="select-wrapper" style="max-width:180px">
+        <select class="form-select" id="tender-selector" style="height:34px;font-size:var(--text-xs)">
+          <option value="T-2026-001" selected>T-2026-001 (Active)</option>
+          <option value="T-2026-002">T-2026-002 (Active)</option>
+          <option value="T-2026-003">T-2026-003 (Review)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="data-table" id="req-table">
+        <thead>
+          <tr>
+            <th>Rule ID</th>
+            <th>Requirement Title</th>
+            <th>Category</th>
+            <th>Mandatory Gate</th>
+            <th>Target Threshold</th>
+            <th>Evidence Document</th>
+            <th>Verification Connector</th>
+            <th style="width:100px">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="req-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Requirement Modal -->
+<div class="modal-backdrop" id="req-modal" style="display:none;">
+  <div class="modal" style="max-width: 600px;">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-req-title">Add Compliance Requirement</h3>
+      <button class="btn btn-ghost" onclick="closeReqModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom:var(--space-4);">
+        <label class="form-label required">Requirement Title</label>
+        <input type="text" class="form-input" id="inp-req-name" placeholder="e.g. ISO 27001 Certification">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);margin-bottom:var(--space-4);">
+        <div class="form-group">
+          <label class="form-label required">Category</label>
+          <select class="form-select" id="inp-req-cat">
+            <option>Statutory</option>
+            <option>Technical</option>
+            <option>Financial</option>
+            <option>Labour</option>
+            <option>Policy</option>
+            <option>MSME</option>
+            <option>Corporate</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label required">Mandatory Gate</label>
+          <select class="form-select" id="inp-req-mand">
+            <option value="true">Yes — Hard Disqualification</option>
+            <option value="false">No — Merit / Exemption Scoring</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:var(--space-4);">
+        <label class="form-label required">Target Threshold / Rule Condition</label>
+        <input type="text" class="form-input" id="inp-req-thresh" placeholder="e.g. Valid until Dec 2026 or later">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);margin-bottom:var(--space-4);">
+        <div class="form-group">
+          <label class="form-label required">Required Evidence File</label>
+          <input type="text" class="form-input" id="inp-req-ev" placeholder="e.g. ISO_Certificate.pdf">
+        </div>
+        <div class="form-group">
+          <label class="form-label required">Verification Mode</label>
+          <select class="form-select" id="inp-req-mode">
+            <option>GST Portal API</option>
+            <option>MCA21 API</option>
+            <option>PAN API</option>
+            <option>EPFO API</option>
+            <option>ESIC API</option>
+            <option>Udyam Portal</option>
+            <option>Rule Engine</option>
+            <option>Manual Verify</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeReqModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveRequirement()">Save Requirement</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/officer.js"></script>
+<script>
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  Navigation.injectShell('officer', 'Requirements', [
+    { label: 'Tenders', href: 'tenders.html' },
+    { label: 'T-2026-001', href: 'tenders.html' },
+    { label: 'Requirement Matrix' }
+  ]);
+
+  let requirements = [...DemoData.REQUIREMENTS];
+  let selectedCategory = 'all';
+
+  function renderRequirements(cat = 'all', query = '') {
+    let filtered = requirements;
+    if (cat !== 'all') filtered = filtered.filter(r => r.category.toLowerCase() === cat.toLowerCase());
+    if (query) {
+      const q = query.toLowerCase();
+      filtered = filtered.filter(r => r.name.toLowerCase().includes(q) || r.id.toLowerCase().includes(q) || r.threshold.toLowerCase().includes(q));
+    }
+
+    const tbody = document.getElementById('req-tbody');
+    if (filtered.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:var(--space-8);color:var(--text-muted);">No requirements matching criteria.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(r => `
+      <tr>
+        <td><code>${r.id}</code></td>
+        <td style="font-weight:var(--fw-medium);color:var(--text-primary);">${r.name}</td>
+        <td><span class="badge badge-processing">${r.category}</span></td>
+        <td>
+          <span class="badge ${r.mandatory ? 'badge-critical' : 'badge-pending'}">
+            ${r.mandatory ? 'Mandatory' : 'Scored'}
+          </span>
+        </td>
+        <td><span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--accent-amber);">${r.threshold}</span></td>
+        <td style="color:var(--text-secondary);font-size:var(--text-xs);">${r.evidence}</td>
+        <td><span class="badge badge-verified" style="font-size:11px;">${r.method}</span></td>
+        <td>
+          <button class="btn btn-ghost" style="padding:4px 8px;font-size:var(--text-xs);" onclick="editRequirement('${r.id}')">
+            Edit
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Filter Buttons
+  document.getElementById('category-filters').addEventListener('click', e => {
+    if (e.target.classList.contains('filter-btn')) {
+      document.querySelectorAll('#category-filters .filter-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      selectedCategory = e.target.getAttribute('data-cat');
+      renderRequirements(selectedCategory, document.getElementById('req-search').value);
+    }
+  });
+
+  // Search
+  document.getElementById('req-search').addEventListener('input', e => {
+    renderRequirements(selectedCategory, e.target.value);
+  });
+
+  function openAddRequirementModal() {
+    document.getElementById('modal-req-title').textContent = 'Add Compliance Requirement';
+    document.getElementById('inp-req-name').value = '';
+    document.getElementById('inp-req-thresh').value = '';
+    document.getElementById('inp-req-ev').value = '';
+    document.getElementById('req-modal').style.display = 'flex';
+  }
+
+  function editRequirement(id) {
+    const item = requirements.find(r => r.id === id);
+    if (!item) return;
+    document.getElementById('modal-req-title').textContent = 'Edit Requirement — ' + id;
+    document.getElementById('inp-req-name').value = item.name;
+    document.getElementById('inp-req-cat').value = item.category;
+    document.getElementById('inp-req-mand').value = item.mandatory ? "true" : "false";
+    document.getElementById('inp-req-thresh').value = item.threshold;
+    document.getElementById('inp-req-ev').value = item.evidence;
+    document.getElementById('inp-req-mode').value = item.method;
+    document.getElementById('req-modal').style.display = 'flex';
+  }
+
+  function closeReqModal() {
+    document.getElementById('req-modal').style.display = 'none';
+  }
+
+  function saveRequirement() {
+    const name = document.getElementById('inp-req-name').value.trim();
+    if (!name) {
+      Toast.error('Validation Error', 'Requirement title is mandatory.');
+      return;
+    }
+    const newReq = {
+      id: 'REQ-' + String(requirements.length + 1).padStart(2, '0'),
+      name: name,
+      category: document.getElementById('inp-req-cat').value,
+      mandatory: document.getElementById('inp-req-mand').value === 'true',
+      threshold: document.getElementById('inp-req-thresh').value || 'VALID',
+      evidence: document.getElementById('inp-req-ev').value || 'Supporting Doc',
+      method: document.getElementById('inp-req-mode').value,
+      status: 'active'
+    };
+    requirements.push(newReq);
+    closeReqModal();
+    renderRequirements(selectedCategory, document.getElementById('req-search').value);
+    document.getElementById('stat-total').textContent = requirements.length;
+    Toast.success('Saved', 'Requirement rule successfully updated.');
+  }
+
+  function exportMatrix() {
+    const list = requirements || [];
+    const headers = ["Requirement ID", "Clause Title", "Category", "Mandatory", "Weightage %", "Target Metric"];
+    const rows = list.map(r => [
+      `"${r.id || ''}"`,
+      `"${(r.title || '').replace(/"/g, '""')}"`,
+      `"${(r.category || '').toUpperCase()}"`,
+      `"${r.mandatory ? 'YES' : 'NO'}"`,
+      `"${r.weight || 0}%"`,
+      `"${(r.description || '').replace(/"/g, '""')}"`
+    ]);
+
+    const csvContent = "\uFEFF" + [headers.join(','), ...rows.map(row => row.join(','))].join("\r\n");
+    Utils.downloadFile('TENDERLENZZ_Requirement_Matrix.csv', csvContent, 'text/csv;charset=utf-8;');
+    Toast.success('Export Completed', 'Downloaded TENDERLENZZ_Requirement_Matrix.csv');
+  }
+
+  // Initial render
+  renderRequirements();
+</script>
+</body>
+</html>

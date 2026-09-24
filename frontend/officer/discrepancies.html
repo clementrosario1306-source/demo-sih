@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discrepancy Center — GOVNEXA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css"><link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    .discrepancy-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      margin-bottom: var(--space-4);
+      transition: all var(--transition-normal);
+    }
+    .discrepancy-card.critical { border-left: 4px solid var(--accent-coral); }
+    .discrepancy-card.high { border-left: 4px solid #FF8C42; }
+    .discrepancy-card.medium { border-left: 4px solid var(--accent-amber); }
+    .discrepancy-card.low { border-left: 4px solid var(--accent-cyan); }
+
+    .comparison-3col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: var(--space-4);
+      background: var(--bg-elevated);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin: var(--space-4) 0;
+    }
+    @media (max-width: 900px) {
+      .comparison-3col {
+        grid-template-columns: 1fr;
+      }
+    }
+    .comp-box-title {
+      font-size: 11px;
+      font-weight: var(--fw-bold);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: var(--space-2);
+    }
+  </style>
+</head>
+<body>
+<div class="page-container page-enter" id="root">
+  <div class="page-header">
+    <div class="page-title-group">
+      <h1 class="page-title">Discrepancy Resolution & Clarifications</h1>
+      <p class="page-subtitle">Flagged variances, cross-document inconsistencies, and bidder clarification logs for T-2026-001</p>
+    </div>
+    <div class="page-actions">
+      <a href="compliance.html" class="btn btn-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to Compliance
+      </a>
+      <button class="btn btn-primary" onclick="openBulkClarification()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Dispatch Clarification Notice
+      </button>
+    </div>
+  </div>
+
+  <!-- Filter Pills -->
+  <div class="filter-bar" id="disc-filters">
+    <button class="filter-btn active" data-sev="all">All Discrepancies (6)</button>
+    <button class="filter-btn" data-sev="critical">Critical (2)</button>
+    <button class="filter-btn" data-sev="high">High (2)</button>
+    <button class="filter-btn" data-sev="medium">Medium (1)</button>
+    <button class="filter-btn" data-sev="low">Low (1)</button>
+  </div>
+
+  <!-- Discrepancy List -->
+  <div id="discrepancy-list">
+    
+    <!-- Item 1: OEM Authorization (Critical) -->
+    <div class="discrepancy-card critical animate-fadeInUp stagger-1" data-sev="critical">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:var(--space-2);">
+        <div>
+          <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-1);">
+            <span class="badge badge-critical">CRITICAL SEVERITY</span>
+            <code style="color:var(--accent-coral);">DISC-001</code>
+            <span style="font-size:var(--text-xs);color:var(--text-muted);">T-2026-001 • Sep 22, 10:27</span>
+          </div>
+          <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);">
+            OEM Authorization Certificate Missing — Document Type Mismatch
+          </h3>
+          <div style="font-size:var(--text-xs);color:var(--accent-cyan);font-weight:var(--fw-semibold);">
+            Bidder: ABC Technologies Pvt Ltd
+          </div>
+        </div>
+        <span class="badge badge-pending">STATUS: OPEN / UNRESOLVED</span>
+      </div>
+
+      <!-- 3-Column Deep Dive -->
+      <div class="comparison-3col">
+        <div>
+          <div class="comp-box-title">1. Tender Clause 4.2 Requirement</div>
+          <div style="font-size:var(--text-xs);color:var(--text-primary);line-height:1.5;">
+            "Bidder must submit valid OEM Manufacturer Authorization Form (MAF) explicitly authorizing the bidder to quote for RFP T-2026-001 with 3-year OEM warranty commitment."
+          </div>
+        </div>
+        <div>
+          <div class="comp-box-title">2. Bidder Extracted Document</div>
+          <div style="font-size:var(--text-xs);color:var(--accent-coral);line-height:1.5;">
+            Uploaded File: <code>OEM_Letter.pdf</code><br>
+            <strong>NLP Classifier Result:</strong> Document is a general Purchase Order (PO #PO-99102) between ABC Tech and Dell India. No MAF clause detected.
+          </div>
+        </div>
+        <div>
+          <div class="comp-box-title">3. Automated System Finding</div>
+          <div style="font-size:var(--text-xs);color:var(--accent-coral);line-height:1.5;">
+            <strong>Mandatory Gate Violated:</strong> Technical criterion REQ-05 failed. Will trigger automatic disqualification if not clarified with authentic MAF certificate.
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-3);">
+        <div style="font-size:var(--text-xs);color:var(--text-muted);">
+          Audit Hash: <code>0x9812a...f7b</code> • Impact: -20 Score Deduction
+        </div>
+        <div style="display:flex;gap:var(--space-2);">
+          <button class="btn btn-secondary" style="font-size:var(--text-xs);padding:6px 12px;" onclick="overrideDiscrepancy('DISC-001')">
+            Override & Accept
+          </button>
+          <button class="btn btn-primary" style="font-size:var(--text-xs);padding:6px 12px;" onclick="requestClarification('DISC-001', 'OEM Authorization', 'ABC Technologies')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Send Clarification Request
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Item 2: Entity Name Mismatch (High) -->
+    <div class="discrepancy-card high animate-fadeInUp stagger-2" data-sev="high">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:var(--space-2);">
+        <div>
+          <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-1);">
+            <span class="badge badge-warning">HIGH SEVERITY</span>
+            <code style="color:var(--accent-amber);">DISC-002</code>
+            <span style="font-size:var(--text-xs);color:var(--text-muted);">T-2026-001 • Sep 22, 10:26</span>
+          </div>
+          <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);">
+            Entity Legal Name Variation Across GSTN and Tender Application
+          </h3>
+          <div style="font-size:var(--text-xs);color:var(--accent-cyan);font-weight:var(--fw-semibold);">
+            Bidder: ABC Technologies Pvt Ltd
+          </div>
+        </div>
+        <span class="badge badge-pending">STATUS: OPEN</span>
+      </div>
+
+      <div class="comparison-3col">
+        <div>
+          <div class="comp-box-title">1. Bid Application Name</div>
+          <div style="font-size:var(--text-xs);color:var(--text-primary);">
+            "ABC Technologies Pvt Ltd" (Submitted on GeM / Portal)
+          </div>
+        </div>
+        <div>
+          <div class="comp-box-title">2. GSTN Database Record</div>
+          <div style="font-size:var(--text-xs);color:var(--accent-amber);">
+            "ABC Technology Private Limited" (GSTIN: 27AABCU9603R1ZM)
+          </div>
+        </div>
+        <div>
+          <div class="comp-box-title">3. Fuzzy Name Match Score</div>
+          <div style="font-size:var(--text-xs);color:var(--text-primary);">
+            Levenshtein Similarity: <strong>92.4%</strong> (Passed threshold, manual acknowledgment recommended).
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-3);">
+        <div style="font-size:var(--text-xs);color:var(--text-muted);">
+          Audit Hash: <code>0x4b71e...8a1</code> • Impact: Minor Name Reconciliation
+        </div>
+        <div style="display:flex;gap:var(--space-2);">
+          <button class="btn btn-secondary" style="font-size:var(--text-xs);padding:6px 12px;" onclick="overrideDiscrepancy('DISC-002')">
+            Accept Variance (Trivial)
+          </button>
+          <button class="btn btn-primary" style="font-size:var(--text-xs);padding:6px 12px;" onclick="requestClarification('DISC-002', 'Entity Name Variation', 'ABC Technologies')">
+            Request Name Confirmation
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Item 3: Local Content (Medium) -->
+    <div class="discrepancy-card medium animate-fadeInUp stagger-3" data-sev="medium">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:var(--space-2);">
+        <div>
+          <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-1);">
+            <span class="badge badge-warning">MEDIUM SEVERITY</span>
+            <code style="color:var(--accent-amber);">DISC-003</code>
+            <span style="font-size:var(--text-xs);color:var(--text-muted);">T-2026-001 • Sep 22, 10:28</span>
+          </div>
+          <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);">
+            Declared Make in India Local Content (18.2%) Below Mandatory 20%
+          </h3>
+          <div style="font-size:var(--text-xs);color:var(--accent-cyan);font-weight:var(--fw-semibold);">
+            Bidder: ABC Technologies Pvt Ltd
+          </div>
+        </div>
+        <span class="badge badge-processing">STATUS: CLARIFICATION SENT</span>
+      </div>
+
+      <div class="comparison-3col">
+        <div>
+          <div class="comp-box-title">1. DPIIT PPP-MII Policy Threshold</div>
+          <div style="font-size:var(--text-xs);color:var(--text-primary);">
+            Class II Local Supplier requires minimum <strong>≥ 20.0%</strong> domestic value addition.
+          </div>
+        </div>
+        <div>
+          <div class="comp-box-title">2. Bidder Self-Declaration File</div>
+          <div style="font-size:var(--text-xs);color:var(--accent-coral);">
+            Calculated Local Content in BOM: <strong>18.2%</strong> (-1.8% shortfall).
+          </div>
+        </div>
+        <div>
+          <div class="comp-box-title">3. Clarification Status</div>
+          <div style="font-size:var(--text-xs);color:var(--accent-amber);">
+            Notice sent to bidder at 10:30 AM. Awaiting revised BOM or Class II exemption certificate.
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-3);">
+        <div style="font-size:var(--text-xs);color:var(--text-muted);">
+          Deadline: Sep 24, 2026 (24 hours remaining)
+        </div>
+        <button class="btn btn-secondary" style="font-size:var(--text-xs);padding:6px 12px;" onclick="viewThread('DISC-003')">
+          View Exchange Thread
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Clarification Composer Modal -->
+<div class="modal-backdrop" id="clarification-modal" style="display:none;">
+  <div class="modal" style="max-width: 650px;">
+    <div class="modal-header">
+      <h3 class="modal-title" id="clar-modal-title">Dispatch Clarification Notice</h3>
+      <button class="btn btn-ghost" onclick="closeClarModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom:var(--space-4);">
+        <label class="form-label">Recipient Bidder</label>
+        <input type="text" class="form-input" id="clar-bidder" value="ABC Technologies Pvt Ltd" readonly>
+      </div>
+      <div class="form-group" style="margin-bottom:var(--space-4);">
+        <label class="form-label">Discrepancy Subject</label>
+        <input type="text" class="form-input" id="clar-subject" value="Missing OEM Manufacturer Authorization Certificate">
+      </div>
+      <div class="form-group" style="margin-bottom:var(--space-4);">
+        <label class="form-label required">Official Clarification Request Body</label>
+        <textarea class="form-textarea" id="clar-body" rows="4">During automated statutory verification for Tender T-2026-001, your uploaded OEM document was identified as Purchase Order #PO-99102. Under Clause 4.2, a valid Manufacturer Authorization Form (MAF) is strictly mandatory. Please upload an authentic MAF certificate with active warranty backing within 48 hours.</textarea>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);">
+        <div class="form-group">
+          <label class="form-label required">Response Deadline</label>
+          <input type="datetime-local" class="form-input" id="clar-deadline" value="2026-09-24T17:00">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Notification Channels</label>
+          <div style="display:flex;gap:var(--space-3);margin-top:var(--space-2);">
+            <label class="checkbox-container"><input type="checkbox" checked> Portal Alert</label>
+            <label class="checkbox-container"><input type="checkbox" checked> Email</label>
+            <label class="checkbox-container"><input type="checkbox" checked> SMS</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeClarModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="sendNotice()">Send Official Notice</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/officer.js"></script>
+<script>
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  Navigation.injectShell('officer', 'Discrepancies', [
+    { label: 'Tenders', href: 'tenders.html' },
+    { label: 'T-2026-001', href: 'tenders.html' },
+    { label: 'Compliance', href: 'compliance.html' },
+    { label: 'Discrepancy Center' }
+  ]);
+
+  document.getElementById('disc-filters').addEventListener('click', e => {
+    if (e.target.classList.contains('filter-btn')) {
+      document.querySelectorAll('#disc-filters .filter-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      const sev = e.target.getAttribute('data-sev');
+      document.querySelectorAll('.discrepancy-card').forEach(c => {
+        if (sev === 'all' || c.getAttribute('data-sev') === sev) c.style.display = 'block';
+        else c.style.display = 'none';
+      });
+    }
+  });
+
+  function requestClarification(id, req, bidder) {
+    document.getElementById('clar-subject').value = 'Clarification Required: ' + req + ' (' + id + ')';
+    document.getElementById('clar-bidder').value = bidder;
+    document.getElementById('clarification-modal').style.display = 'flex';
+  }
+
+  function openBulkClarification() {
+    document.getElementById('clar-subject').value = 'Comprehensive Discrepancy Clarification Notice — T-2026-001';
+    document.getElementById('clarification-modal').style.display = 'flex';
+  }
+
+  function closeClarModal() {
+    document.getElementById('clarification-modal').style.display = 'none';
+  }
+
+  function sendNotice() {
+    closeClarModal();
+    Toast.success('Notice Dispatched', 'Clarification request logged on immutable audit ledger and sent to bidder.');
+  }
+
+  function overrideDiscrepancy(id) {
+    Toast.warning('Variance Overridden', 'Officer variance acceptance recorded with timestamp and signature.');
+  }
+
+  function viewThread(id) {
+    Toast.info('Thread Viewer', 'Loading clarification response history for ' + id);
+  }
+</script>
+</body>
+</html>

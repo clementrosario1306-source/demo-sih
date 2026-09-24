@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evidence Chain — TENDERLENZZ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css"><link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    .chain-container {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      overflow-x: auto;
+      padding: var(--space-6) 0;
+    }
+    .chain-node {
+      background: var(--bg-surface);
+      border: 2px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      min-width: 180px;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      position: relative;
+    }
+    .chain-node:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-2px);
+    }
+    .chain-node.active {
+      border-color: var(--accent-cyan);
+      background: var(--accent-cyan-dim);
+      box-shadow: 0 0 15px var(--accent-cyan-glow);
+    }
+    .chain-node.verified-node {
+      border-color: var(--accent-mint);
+    }
+    .chain-arrow {
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.7;
+    }
+    .json-box {
+      background: #1C2421;
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #FBBF24;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+<div class="page-container page-enter" id="root">
+  <div class="page-header">
+    <div class="page-title-group">
+      <h1 class="page-title">Cryptographic Evidence Chain</h1>
+      <p class="page-subtitle">End-to-end lineage tracing from tender clause to live API reconciliation</p>
+    </div>
+    <div class="page-actions">
+      <a href="compliance.html" class="btn btn-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to Compliance
+      </a>
+      <button class="btn btn-primary" onclick="verifyHash()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Verify Cryptographic Root Hash
+      </button>
+    </div>
+  </div>
+
+  <!-- Evidence Selector -->
+  <div class="card" style="padding:var(--space-4);margin-bottom:var(--space-6);">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-4);">
+      <div style="display:flex;align-items:center;gap:var(--space-3);">
+        <label class="form-label" style="margin:0;">Select Requirement Chain:</label>
+        <select class="form-select" id="chain-select" style="min-width:240px;height:36px;" onchange="switchChain(this.value)">
+          <option value="gst" selected>REQ-01: GST Registration Certificate</option>
+          <option value="oem">REQ-05: OEM Authorization (Discrepancy)</option>
+          <option value="pan">REQ-03: PAN Verification</option>
+          <option value="msme">REQ-02: MSME Udyam Certificate</option>
+          <option value="mca">REQ-12: MCA Incorporation (CIN)</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:var(--space-2);">
+        <span class="badge badge-verified" id="chain-status-badge">CHAIN VERIFIED</span>
+        <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-muted);">Root: 0x8a19...d4</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive 6-Node Evidence Chain -->
+  <div class="chain-container" id="chain-visual">
+    
+    <!-- Node 1 -->
+    <div class="chain-node active" id="node-1" onclick="showNode(1)">
+      <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;font-weight:var(--fw-bold);">Node 1: Clause</div>
+      <div style="font-size:var(--text-xs);font-weight:var(--fw-semibold);color:var(--text-primary);margin-top:4px;">Tender RFP Rule</div>
+      <div style="font-size:11px;color:var(--accent-cyan);margin-top:2px;">Clause 3.1 (Statutory)</div>
+    </div>
+
+    <div class="chain-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+
+    <!-- Node 2 -->
+    <div class="chain-node" id="node-2" onclick="showNode(2)">
+      <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;font-weight:var(--fw-bold);">Node 2: Document</div>
+      <div style="font-size:var(--text-xs);font-weight:var(--fw-semibold);color:var(--text-primary);margin-top:4px;">PDF Uploaded</div>
+      <div style="font-size:11px;color:var(--text-secondary);margin-top:2px;" id="node2-sub">GST_Cert.pdf</div>
+    </div>
+
+    <div class="chain-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+
+    <!-- Node 3 -->
+    <div class="chain-node" id="node-3" onclick="showNode(3)">
+      <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;font-weight:var(--fw-bold);">Node 3: Parser</div>
+      <div style="font-size:var(--text-xs);font-weight:var(--fw-semibold);color:var(--text-primary);margin-top:4px;">OCR & Layout</div>
+      <div style="font-size:11px;color:var(--accent-mint);margin-top:2px;">99.2% Confidence</div>
+    </div>
+
+    <div class="chain-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+
+    <!-- Node 4 -->
+    <div class="chain-node" id="node-4" onclick="showNode(4)">
+      <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;font-weight:var(--fw-bold);">Node 4: Source API</div>
+      <div style="font-size:var(--text-xs);font-weight:var(--fw-semibold);color:var(--text-primary);margin-top:4px;">Gov Registry Live</div>
+      <div style="font-size:11px;color:var(--accent-cyan);margin-top:2px;" id="node4-sub">GSTN API Gateway</div>
+    </div>
+
+    <div class="chain-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+
+    <!-- Node 5 -->
+    <div class="chain-node" id="node-5" onclick="showNode(5)">
+      <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;font-weight:var(--fw-bold);">Node 5: Match Engine</div>
+      <div style="font-size:var(--text-xs);font-weight:var(--fw-semibold);color:var(--text-primary);margin-top:4px;">Reconciliation</div>
+      <div style="font-size:11px;color:var(--accent-mint);margin-top:2px;" id="node5-sub">100% Data Match</div>
+    </div>
+
+    <div class="chain-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+
+    <!-- Node 6 -->
+    <div class="chain-node verified-node" id="node-6" onclick="showNode(6)">
+      <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;font-weight:var(--fw-bold);">Node 6: Proof</div>
+      <div style="font-size:var(--text-xs);font-weight:var(--fw-semibold);color:var(--text-primary);margin-top:4px;">Compliance State</div>
+      <div style="font-size:11px;color:var(--accent-mint);margin-top:2px;" id="node6-sub">✓ VERIFIED (+15pts)</div>
+    </div>
+
+  </div>
+
+  <!-- Node Deep Dive Inspector Grid -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-6);margin-top:var(--space-6);">
+    
+    <!-- Left: Node Details & Verification Proof -->
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-4);">
+        <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);" id="detail-title">
+          Node 1: Tender RFP Clause 3.1
+        </h3>
+        <span class="badge badge-processing" id="detail-badge">STATUTORY RULE</span>
+      </div>
+
+      <div style="margin-bottom:var(--space-4);" id="detail-body">
+        <p style="font-size:var(--text-sm);color:var(--text-secondary);line-height:1.6;">
+          <strong>RFP Clause Text:</strong> "The Bidder must be registered under Goods and Services Tax (GST) Act in India and provide a valid copy of GST Registration Certificate with active tax status."
+        </p>
+        <div style="margin-top:var(--space-3);padding:var(--space-3);background:var(--bg-elevated);border-radius:var(--radius-md);font-size:var(--text-xs);">
+          <div><strong>Rule ID:</strong> REQ-01</div>
+          <div><strong>Mandatory:</strong> Yes (Hard Disqualification Gate)</div>
+          <div><strong>Weight:</strong> 15 Points</div>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid var(--border-subtle);padding-top:var(--space-3);display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);font-family:var(--font-mono);">
+        <span>Timestamp: 2026-09-22 10:05:00 UTC</span>
+        <span>Block #849201</span>
+      </div>
+    </div>
+
+    <!-- Right: Raw Cryptographic / JSON Payload -->
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-4);">
+        <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);">
+          Raw JSON & Hash Evidence
+        </h3>
+        <button class="btn btn-ghost" style="font-size:var(--text-xs);padding:4px 8px;" onclick="Toast.info('Copied', 'Evidence hash copied to clipboard.')">
+          Copy Hash
+        </button>
+      </div>
+
+      <div class="json-box" id="json-viewer">{
+  "rule_id": "REQ-01",
+  "name": "GST Registration",
+  "category": "Statutory",
+  "mandatory": true,
+  "weight": 15,
+  "rfp_source": {
+    "document": "RFP_T-2026-001.pdf",
+    "page": 14,
+    "clause": "3.1.2",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}</div>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/officer.js"></script>
+<script>
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  Navigation.injectShell('officer', 'Evidence Chain', [
+    { label: 'Tenders', href: 'tenders.html' },
+    { label: 'T-2026-001', href: 'tenders.html' },
+    { label: 'Compliance', href: 'compliance.html' },
+    { label: 'Evidence Chain' }
+  ]);
+
+  const CHAIN_DATA = {
+    gst: {
+      title: 'REQ-01: GST Registration Certificate',
+      nodes: [
+        { title: 'Node 1: Tender RFP Clause 3.1', badge: 'STATUTORY RULE', body: '<strong>RFP Clause:</strong> Mandatory active GSTIN with proof of timely 3B return filings for preceding 3 months.', json: { rule: "REQ-01", clause: "3.1", mandatory: true, threshold: "ACTIVE" } },
+        { title: 'Node 2: Bidder Document (PDF)', badge: 'DIGITAL ASSET', body: '<strong>File:</strong> GST_Certificate_2026.pdf<br><strong>Uploaded by:</strong> Priya Nair (ABC Technologies)<br><strong>File SHA-256:</strong> 0x4f81...99bc', json: { filename: "GST_Certificate_2026.pdf", size: "482 KB", sha256: "4f8199bce8102a991f2c" } },
+        { title: 'Node 3: OCR Key-Value Extraction', badge: 'TESSERACT / VISION', body: '<strong>Extracted GSTIN:</strong> 27AABCU9603R1ZM<br><strong>Legal Entity:</strong> ABC Technologies Pvt Ltd<br><strong>Date of Reg:</strong> 12/04/2018', json: { gstin: "27AABCU9603R1ZM", legal_name: "ABC Technologies Pvt Ltd", confidence: 0.992 } },
+        { title: 'Node 4: Live GSTN API Gateway', badge: 'LIVE GOV PORTAL', body: '<strong>API Response:</strong> 200 OK<br><strong>Status:</strong> Active<br><strong>Taxpayer Type:</strong> Regular<br><strong>Filing Status:</strong> Up to date (GSTR-3B Aug 2026 filed)', json: { api_status: "ACTIVE", gstin: "27AABCU9603R1ZM", return_status: "CURRENT", timestamp: "2026-09-22T10:15:22Z" } },
+        { title: 'Node 5: Reconciliation Engine', badge: 'COMPARATOR', body: '<strong>Exact Match:</strong> GSTIN 27AABCU9603R1ZM matched across bid, OCR payload, and GSTN Government registry.', json: { matched: true, variance: 0.0, rule_satisfied: true } },
+        { title: 'Node 6: Compliance State Locked', badge: 'VERIFIED', body: '<strong>Verdict:</strong> FULLY COMPLIANT (+15 Points awarded to score index).', json: { status: "VERIFIED", score: 15, locked: true, audit_tx: "0x8a192b" } }
+      ]
+    },
+    oem: {
+      title: 'REQ-05: OEM Manufacturer Authorization',
+      nodes: [
+        { title: 'Node 1: Tender RFP Clause 4.2', badge: 'TECHNICAL RULE', body: '<strong>RFP Clause:</strong> OEM Manufacturer Authorization Form (MAF) required with warranty undertaking.', json: { rule: "REQ-05", mandatory: true } },
+        { title: 'Node 2: Bidder Document (PDF)', badge: 'DIGITAL ASSET', body: '<strong>File:</strong> OEM_Letter.pdf<br><strong>Uploaded by:</strong> Priya Nair', json: { filename: "OEM_Letter.pdf", size: "320 KB" } },
+        { title: 'Node 3: OCR & Classifier Analysis', badge: 'NLP CLASSIFIER', body: '<strong>Classification:</strong> PURCHASE ORDER (Not MAF)<br><strong>Missing:</strong> Warranty pledge, authorization text.', json: { doc_type_detected: "PURCHASE_ORDER", expected: "MAF_CERTIFICATE", confidence: 0.96 } },
+        { title: 'Node 4: OEM Registry Check', badge: 'AUTHORITY API', body: '<strong>OEM Database:</strong> No active MAF issued for RFP T-2026-001 under ABC Tech.', json: { oem_registered: false, status: "NOT_FOUND" } },
+        { title: 'Node 5: Anomaly Comparator', badge: 'DISCREPANCY FLAGGED', body: '<strong>Mismatch:</strong> Uploaded document fails technical requirement REQ-05.', json: { error: "INVALID_DOCUMENT_TYPE", disc_id: "DISC-001" } },
+        { title: 'Node 6: Compliance State', badge: 'NON-COMPLIANT', body: '<strong>Verdict:</strong> NON-COMPLIANT (-20 Score Deduction, Hard Gate Alert).', json: { status: "NON_COMPLIANT", score: -20, action: "CLARIFICATION_REQUIRED" } }
+      ]
+    }
+  };
+
+  let currentChainKey = 'gst';
+  let currentNodeIdx = 0;
+
+  function showNode(idx) {
+    currentNodeIdx = idx - 1;
+    for (let i = 1; i <= 6; i++) {
+      const nodeEl = document.getElementById('node-' + i);
+      nodeEl.classList.remove('active');
+      if (i === idx) nodeEl.classList.add('active');
+    }
+
+    const chain = CHAIN_DATA[currentChainKey] || CHAIN_DATA.gst;
+    const nodeData = chain.nodes[currentNodeIdx];
+
+    document.getElementById('detail-title').textContent = nodeData.title;
+    document.getElementById('detail-badge').textContent = nodeData.badge;
+    document.getElementById('detail-body').innerHTML = `<p style="font-size:var(--text-sm);color:var(--text-secondary);line-height:1.6;">${nodeData.body}</p>`;
+    document.getElementById('json-viewer').textContent = JSON.stringify(nodeData.json, null, 2);
+  }
+
+  function switchChain(val) {
+    currentChainKey = val;
+    const isOEM = val === 'oem';
+    
+    document.getElementById('node2-sub').textContent = isOEM ? 'OEM_Letter.pdf' : 'GST_Cert.pdf';
+    document.getElementById('node4-sub').textContent = isOEM ? 'OEM Registry API' : 'GSTN API Gateway';
+    document.getElementById('node5-sub').textContent = isOEM ? 'Anomaly Flagged' : '100% Data Match';
+    document.getElementById('node6-sub').textContent = isOEM ? '✕ NON-COMPLIANT' : '✓ VERIFIED (+15pts)';
+
+    const badge = document.getElementById('chain-status-badge');
+    badge.className = isOEM ? 'badge badge-critical' : 'badge badge-verified';
+    badge.textContent = isOEM ? 'DISCREPANCY FLAGGED' : 'CHAIN VERIFIED';
+
+    showNode(1);
+  }
+
+  function verifyHash() {
+    Toast.success('Cryptographic Check', 'Merkle Root SHA-256 (0x8a192bce99a2) successfully verified against blockchain anchor.');
+  }
+
+  showNode(1);
+</script>
+</body>
+</html>

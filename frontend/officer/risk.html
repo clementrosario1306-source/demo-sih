@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Risk Assessment — GOVNEXA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css"><link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    .risk-matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-3);
+      margin-top: var(--space-3);
+    }
+    .matrix-cell {
+      padding: var(--space-3);
+      border-radius: var(--radius-md);
+      font-size: 11px;
+      font-weight: var(--fw-semibold);
+      text-align: center;
+      min-height: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .mat-low { background: rgba(66,232,160,0.1); border: 1px solid rgba(66,232,160,0.3); color: var(--accent-mint); }
+    .mat-med { background: rgba(255,184,77,0.1); border: 1px solid rgba(255,184,77,0.3); color: var(--accent-amber); }
+    .mat-high { background: rgba(255,92,108,0.1); border: 1px solid rgba(255,92,108,0.3); color: var(--accent-coral); }
+  </style>
+</head>
+<body>
+<div class="page-container page-enter" id="root">
+  <div class="page-header">
+    <div class="page-title-group">
+      <h1 class="page-title">Risk Assessment & Anomaly Intelligence</h1>
+      <p class="page-subtitle">Predictive risk modeling for ABC Technologies Pvt Ltd (T-2026-001)</p>
+    </div>
+    <div class="page-actions">
+      <a href="compliance.html" class="btn btn-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to Compliance
+      </a>
+      <a href="decision.html" class="btn btn-primary">
+        Review Final Decision
+      </a>
+    </div>
+  </div>
+
+  <!-- Mandatory Institutional Legal Disclaimer Alert -->
+  <div class="alert alert-warning" style="margin-bottom:var(--space-6);">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    <div>
+      <strong>Institutional Governance Notice:</strong> The automated Risk Index is an objective risk-ranking decision-support tool. A "Medium Risk" score does <u>NOT</u> constitute an automated disqualification. Only the Competent Procurement Authority may take statutory qualification or disqualification decisions based on verified evidence.
+    </div>
+  </div>
+
+  <!-- Risk Factors Breakdown Grid -->
+  <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:var(--space-6);">
+    
+    <!-- Left: 4 Categorized Risk Factors -->
+    <div class="card">
+      <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);margin-bottom:var(--space-4);">
+        Risk Drivers & Probability Breakdown
+      </h3>
+
+      <!-- Factor 1 -->
+      <div style="background:var(--bg-elevated);border-left:4px solid var(--accent-coral);border-radius:var(--radius-md);padding:var(--space-4);margin-bottom:var(--space-3);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <strong style="color:var(--text-primary);font-size:var(--text-sm);">1. OEM Authorization Absence (Technical Risk)</strong>
+          <span class="badge badge-critical">HIGH RISK (65%)</span>
+        </div>
+        <p style="font-size:var(--text-xs);color:var(--text-secondary);line-height:1.5;">
+          Failure to provide authentic MAF from equipment manufacturer introduces supply chain & post-warranty support risk. Disqualification risk is critical unless remedied via clarification.
+        </p>
+      </div>
+
+      <!-- Factor 2 -->
+      <div style="background:var(--bg-elevated);border-left:4px solid var(--accent-amber);border-radius:var(--radius-md);padding:var(--space-4);margin-bottom:var(--space-3);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <strong style="color:var(--text-primary);font-size:var(--text-sm);">2. MII Local Content Shortfall (Policy Risk)</strong>
+          <span class="badge badge-warning">MODERATE (38%)</span>
+        </div>
+        <p style="font-size:var(--text-xs);color:var(--text-secondary);line-height:1.5;">
+          Declared local content is 18.2% vs required 20.0%. Marginal gap (-1.8%) can be regularized if bidder qualifies under alternative MSME sub-clauses.
+        </p>
+      </div>
+
+      <!-- Factor 3 -->
+      <div style="background:var(--bg-elevated);border-left:4px solid var(--accent-cyan);border-radius:var(--radius-md);padding:var(--space-4);margin-bottom:var(--space-3);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <strong style="color:var(--text-primary);font-size:var(--text-sm);">3. Entity Legal Name Discrepancy (Registry Variance)</strong>
+          <span class="badge badge-processing">LOW RISK (12%)</span>
+        </div>
+        <p style="font-size:var(--text-xs);color:var(--text-secondary);line-height:1.5;">
+          "ABC Technology Private Limited" (GSTN) vs "ABC Technologies Pvt Ltd" (Bid). Common string abbreviation variance with 92% fuzzy match. Zero fraud indicator.
+        </p>
+      </div>
+
+      <!-- Factor 4 -->
+      <div style="background:var(--bg-elevated);border-left:4px solid var(--accent-mint);border-radius:var(--radius-md);padding:var(--space-4);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <strong style="color:var(--text-primary);font-size:var(--text-sm);">4. Financial Solvency & Tax Health</strong>
+          <span class="badge badge-verified">VERY LOW (5%)</span>
+        </div>
+        <p style="font-size:var(--text-xs);color:var(--text-secondary);line-height:1.5;">
+          Zero tax default, GSTR-3B filings active, turnover ₹4.8 Cr exceeds tender threshold by 160%. Strong financial standing.
+        </p>
+      </div>
+    </div>
+
+    <!-- Right: Risk Matrix & Mitigating Factors -->
+    <div>
+      <div class="card" style="margin-bottom:var(--space-6);">
+        <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);margin-bottom:var(--space-2);">
+          Risk Heatmap (Impact vs Likelihood)
+        </h3>
+        <div class="risk-matrix-grid">
+          <div class="matrix-cell mat-med">Low Impact<br>High Prob</div>
+          <div class="matrix-cell mat-high">Med Impact<br>High Prob</div>
+          <div class="matrix-cell mat-high" style="border-width:2px;">OEM Absence<br><strong>(Critical)</strong></div>
+          
+          <div class="matrix-cell mat-low">Low Impact<br>Med Prob</div>
+          <div class="matrix-cell mat-med" style="border-width:2px;">MII Content<br><strong>(18.2%)</strong></div>
+          <div class="matrix-cell mat-high">High Impact<br>Med Prob</div>
+          
+          <div class="matrix-cell mat-low">Tax Variance<br><strong>(5%)</strong></div>
+          <div class="matrix-cell mat-low">Name String<br><strong>(12%)</strong></div>
+          <div class="matrix-cell mat-med">High Impact<br>Low Prob</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);margin-bottom:var(--space-3);">
+          Mitigating Factors & Track Record
+        </h3>
+        <ul style="padding-left:var(--space-4);font-size:var(--text-xs);color:var(--text-secondary);line-height:1.7;">
+          <li>✓ 3 successfully executed public procurement contracts on GeM in past 24 months.</li>
+          <li>✓ 0 debarment / blacklisting notices on CVC (Central Vigilance Commission) registry.</li>
+          <li>✓ Valid NSIC single point registration valid through Dec 2027.</li>
+          <li>✓ Verified EPFO and ESIC regular contribution history for 42 employees.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/officer.js"></script>
+<script>
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  Navigation.injectShell('officer', 'Risk Assessment', [
+    { label: 'Tenders', href: 'tenders.html' },
+    { label: 'T-2026-001', href: 'tenders.html' },
+    { label: 'Compliance', href: 'compliance.html' },
+    { label: 'Risk Assessment' }
+  ]);
+</script>
+</body>
+</html>

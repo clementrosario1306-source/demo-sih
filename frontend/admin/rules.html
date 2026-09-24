@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rule Engine — TENDERLENZZ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css"><link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+<div class="page-container page-enter" id="root">
+  <div class="page-header">
+    <div class="page-title-group">
+      <h1 class="page-title">Compliance Rule Engine & Simulator</h1>
+      <p class="page-subtitle">Configure logic expressions, statutory thresholds, and test evaluation algorithms in the sandbox</p>
+    </div>
+    <div class="page-actions">
+      <button class="btn btn-primary" onclick="Toast.success('Rules Published', 'Rule configurations armed across verification engines.')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Publish Rules
+      </button>
+    </div>
+  </div>
+
+  <!-- 2-Column: Rules List + User-Friendly Interactive Simulator Playground -->
+  <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:var(--space-6);">
+    
+    <!-- Left: Rules Matrix -->
+    <div class="table-container">
+      <div class="table-toolbar">
+        <span class="table-toolbar-title">Active Statutory Rules</span>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Rule ID</th>
+              <th>Rule Description</th>
+              <th>Category</th>
+              <th>Logic Expression</th>
+              <th>Gate Type</th>
+              <th>Weight</th>
+            </tr>
+          </thead>
+          <tbody id="rules-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Right: User-Friendly Interactive Sandbox Simulator -->
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-4);border-bottom:1px solid var(--border-subtle);padding-bottom:var(--space-2);">
+        <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);">
+          ⚡ Live Bidder Compliance Simulator
+        </h3>
+        <span class="badge badge-processing">SANDBOX</span>
+      </div>
+
+      <!-- User-Friendly Form Inputs -->
+      <form id="sim-form" onsubmit="event.preventDefault(); executeRuleSimulation();">
+        <div style="display:flex;flex-direction:column;gap:var(--space-3);margin-bottom:var(--space-4);">
+          
+          <!-- GST Status -->
+          <div class="form-group">
+            <label class="form-label" style="font-size:var(--text-xs);">GST Registration & 3B Filing</label>
+            <select class="form-select" id="sim-gst" style="font-size:var(--text-xs);">
+              <option value="ACTIVE_REGULAR" selected>Active GSTIN & Regular 3B Filing (Compliant)</option>
+              <option value="ACTIVE_DEFICIENT">Active GSTIN with GSTR-3B Defaulter</option>
+              <option value="SUSPENDED">Suspended / Inactive GSTIN</option>
+            </select>
+          </div>
+
+          <!-- Local Content -->
+          <div class="form-group">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-1);">
+              <label class="form-label" style="font-size:var(--text-xs);margin-bottom:0;">Make in India Local Content (%)</label>
+              <span id="sim-lc-badge" class="badge badge-warning" style="font-size:10px;">18.2% (Below 20% Min)</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:var(--space-2);">
+              <input type="range" id="sim-lc-slider" min="0" max="100" step="0.5" value="18.2" style="flex:1;accent-color:var(--accent-cyan);" oninput="updateLocalContent(this.value)">
+              <input type="number" id="sim-lc-input" min="0" max="100" step="0.1" value="18.2" class="form-input" style="width:70px;height:32px;font-size:var(--text-xs);padding:2px 6px;" oninput="updateLocalContent(this.value)">
+            </div>
+          </div>
+
+          <!-- OEM Authorization -->
+          <div class="form-group">
+            <label class="form-label" style="font-size:var(--text-xs);">OEM Authorization Document (MAF)</label>
+            <select class="form-select" id="sim-oem" style="font-size:var(--text-xs);">
+              <option value="PO" selected>Purchase Order Copy Only (Invalid Format)</option>
+              <option value="VALID_MAF">Manufacturer Authorization Form (MAF Valid)</option>
+              <option value="EXPIRED_MAF">Expired MAF Certificate</option>
+              <option value="MISSING">Missing / Not Uploaded</option>
+            </select>
+          </div>
+
+          <!-- MSME Status & Warranty Grid -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);">
+            <div class="form-group">
+              <label class="form-label" style="font-size:var(--text-xs);">Udyam / MSME Certificate</label>
+              <select class="form-select" id="sim-msme" style="font-size:var(--text-xs);">
+                <option value="true" selected>Registered & Verified (Exempted)</option>
+                <option value="false">Non-MSME Entity</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="font-size:var(--text-xs);">Warranty Commitment</label>
+              <select class="form-select" id="sim-warranty" style="font-size:var(--text-xs);">
+                <option value="3" selected>3 Years On-Site Backing</option>
+                <option value="1">1 Year Limited</option>
+                <option value="0">No Backing Declared</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="display:flex;gap:var(--space-2);margin-bottom:var(--space-4);">
+          <button type="submit" class="btn btn-primary" style="flex:2;justify-content:center;font-size:var(--text-xs);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Evaluate Bidder Profile
+          </button>
+          <button type="button" class="btn btn-secondary" style="flex:1;justify-content:center;font-size:var(--text-xs);" onclick="resetSampleInputs()">
+            Reset Defaults
+          </button>
+        </div>
+      </form>
+
+      <!-- Simulation Result Output Box -->
+      <div id="sim-result-box" style="background:var(--bg-elevated);padding:var(--space-4);border-radius:var(--radius-md);border:1px solid var(--border-default);font-size:var(--text-xs);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-2);border-bottom:1px solid var(--border-subtle);padding-bottom:var(--space-1);">
+          <span style="color:var(--text-muted);font-weight:var(--fw-medium);">Engine Evaluation Execution:</span>
+          <span id="sim-status-tag" class="badge badge-verified" style="font-size:10px;">8.4 ms · 4 Rules Checked</span>
+        </div>
+
+        <div id="sim-breakdown-list" style="display:flex;flex-direction:column;gap:6px;margin:var(--space-2) 0;">
+          <!-- Dynamically filled on evaluate -->
+        </div>
+
+        <div id="sim-verdict-banner" style="margin-top:var(--space-3);padding:var(--space-2) var(--space-3);background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="color:var(--text-muted);font-size:10px;text-transform:uppercase;">Calculated Compliance Score</div>
+            <div id="sim-score-text" style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--accent-amber);font-family:var(--font-mono);">
+              78 / 100
+            </div>
+          </div>
+          <span id="sim-verdict-badge" class="badge badge-warning">Conditional Clarification</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  Navigation.injectShell('admin', 'Rule Engine', [{ label: 'Rule Engine' }]);
+
+  const rules = AdminData.SYSTEM_RULES;
+  document.getElementById('rules-tbody').innerHTML = rules.map(r => `
+    <tr>
+      <td><code>${r.id}</code></td>
+      <td style="font-weight:var(--fw-semibold);color:var(--text-primary);">${r.name}</td>
+      <td><span class="badge badge-processing">${r.category}</span></td>
+      <td><code style="font-size:10px;color:var(--accent-cyan);">${r.condition}</code></td>
+      <td><span class="badge ${r.hardGate ? 'badge-critical' : 'badge-pending'}">${r.hardGate ? 'Hard Gate' : 'Scored'}</span></td>
+      <td style="font-family:var(--font-mono);font-weight:var(--fw-bold);">${r.weight} pts</td>
+    </tr>
+  `).join('');
+
+  function updateLocalContent(val) {
+    const num = parseFloat(val) || 0;
+    document.getElementById('sim-lc-slider').value = num;
+    document.getElementById('sim-lc-input').value = num;
+    const badge = document.getElementById('sim-lc-badge');
+    if (num >= 50) {
+      badge.className = 'badge badge-verified';
+      badge.textContent = `${num}% (Class I Supplier)`;
+    } else if (num >= 20) {
+      badge.className = 'badge badge-active';
+      badge.textContent = `${num}% (Class II Supplier)`;
+    } else {
+      badge.className = 'badge badge-warning';
+      badge.textContent = `${num}% (Below 20% Min)`;
+    }
+  }
+
+  function resetSampleInputs() {
+    document.getElementById('sim-gst').value = 'ACTIVE_REGULAR';
+    updateLocalContent(18.2);
+    document.getElementById('sim-oem').value = 'PO';
+    document.getElementById('sim-msme').value = 'true';
+    document.getElementById('sim-warranty').value = '3';
+    executeRuleSimulation();
+  }
+
+  function executeRuleSimulation() {
+    const gstVal = document.getElementById('sim-gst').value;
+    const lcVal = parseFloat(document.getElementById('sim-lc-input').value) || 0;
+    const oemVal = document.getElementById('sim-oem').value;
+    const msmeVal = document.getElementById('sim-msme').value === 'true';
+    const warrantyVal = parseInt(document.getElementById('sim-warranty').value) || 0;
+
+    let score = 50; // base points
+    const list = [];
+
+    // GST Rule (15 pts)
+    if (gstVal === 'ACTIVE_REGULAR') {
+      score += 15;
+      list.push('<div style="color:var(--accent-mint);">✓ <strong>RULE-01 (GST):</strong> Passed — Active GSTIN with regular 3B filings (+15 pts)</div>');
+    } else {
+      list.push('<div style="color:var(--accent-coral);">✕ <strong>RULE-01 (GST):</strong> Failed — Deficient GST status (0 pts)</div>');
+    }
+
+    // Local Content Rule (10 pts)
+    if (lcVal >= 20) {
+      score += 10;
+      list.push(`<div style="color:var(--accent-mint);">✓ <strong>RULE-02 (Make in India):</strong> Passed — ${lcVal}% local content meets ≥ 20% threshold (+10 pts)</div>`);
+    } else {
+      list.push(`<div style="color:var(--accent-coral);">✕ <strong>RULE-02 (Make in India):</strong> Failed — ${lcVal}% is below mandatory 20% threshold (0 pts)</div>`);
+    }
+
+    // OEM Rule (20 pts)
+    if (oemVal === 'VALID_MAF') {
+      score += 20;
+      list.push('<div style="color:var(--accent-mint);">✓ <strong>RULE-03 (OEM Authorization):</strong> Passed — Valid Manufacturer Authorization Form (+20 pts)</div>');
+    } else {
+      list.push('<div style="color:var(--accent-coral);">✕ <strong>RULE-03 (OEM Authorization):</strong> Failed — Missing or invalid MAF document format (0 pts)</div>');
+    }
+
+    // MSME Rule (5 pts)
+    if (msmeVal) {
+      score += 5;
+      list.push('<div style="color:var(--accent-mint);">✓ <strong>RULE-04 (MSME Preference):</strong> Passed — Udyam Certificate verified (+5 pts)</div>');
+    } else {
+      list.push('<div style="color:var(--text-muted);">○ <strong>RULE-04 (MSME Preference):</strong> Non-MSME — General category applied (0 pts)</div>');
+    }
+
+    score = Math.min(100, Math.max(0, score));
+
+    document.getElementById('sim-breakdown-list').innerHTML = list.join('');
+    document.getElementById('sim-score-text').textContent = `${score} / 100`;
+
+    const verdictBadge = document.getElementById('sim-verdict-badge');
+    if (score >= 85) {
+      verdictBadge.className = 'badge badge-verified';
+      verdictBadge.textContent = 'Compliant — Low Risk';
+      document.getElementById('sim-score-text').style.color = 'var(--accent-mint)';
+    } else if (score >= 65) {
+      verdictBadge.className = 'badge badge-warning';
+      verdictBadge.textContent = 'Conditional Clarification Required';
+      document.getElementById('sim-score-text').style.color = 'var(--accent-amber)';
+    } else {
+      verdictBadge.className = 'badge badge-critical';
+      verdictBadge.textContent = 'High Risk / Non-Compliant';
+      document.getElementById('sim-score-text').style.color = 'var(--accent-coral)';
+    }
+
+    document.getElementById('sim-result-box').style.display = 'block';
+    Toast.success('Simulator Executed', `Evaluation completed with calculated score of ${score}/100.`);
+  }
+
+  // Initial run on load
+  executeRuleSimulation();
+</script>
+</body>
+</html>

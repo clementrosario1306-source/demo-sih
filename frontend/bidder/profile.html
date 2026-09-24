@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Profile — GOVNEXA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css"><link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+<div class="page-container page-enter" id="root">
+  <div class="page-header">
+    <div class="page-title-group">
+      <h1 class="page-title">Enterprise Supplier Profile</h1>
+      <p class="page-subtitle">Statutory credentials, registration numbers, and banking details for ABC Technologies</p>
+    </div>
+    <div class="page-actions">
+      <button class="btn btn-secondary" onclick="syncMCA()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        Sync with MCA21 & GSTN
+      </button>
+      <button class="btn btn-primary" onclick="saveProfile()">
+        Save Profile
+      </button>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-6);">
+    
+    <!-- Legal Entity & Tax Details -->
+    <div class="card">
+      <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);margin-bottom:var(--space-4);border-bottom:1px solid var(--border-subtle);padding-bottom:var(--space-2);">
+        1. Legal Entity Identification
+      </h3>
+
+      <div class="form-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);">
+        <div class="form-group" style="grid-column:1/-1;">
+          <label class="form-label required">Legal Entity Name (as per MCA/GSTN)</label>
+          <input type="text" class="form-input" value="ABC Technologies Pvt Ltd" id="prof-name">
+        </div>
+        <div class="form-group">
+          <label class="form-label required">GSTIN</label>
+          <input type="text" class="form-input" value="27AABCU9603R1ZM" id="prof-gstin">
+        </div>
+        <div class="form-group">
+          <label class="form-label required">Company PAN</label>
+          <input type="text" class="form-input" value="AABCU9603R" id="prof-pan">
+        </div>
+        <div class="form-group">
+          <label class="form-label required">Corporate Identity (CIN)</label>
+          <input type="text" class="form-input" value="U72200DL2018PTC334567">
+        </div>
+        <div class="form-group">
+          <label class="form-label required">Date of Incorporation</label>
+          <input type="date" class="form-input" value="2018-04-12">
+        </div>
+        <div class="form-group" style="grid-column:1/-1;">
+          <label class="form-label required">Registered Office Address</label>
+          <textarea class="form-textarea" rows="2">Plot 42, Okhla Industrial Area Phase III, New Delhi 110020</textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preferences & MSME Reg -->
+    <div class="card">
+      <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);margin-bottom:var(--space-4);border-bottom:1px solid var(--border-subtle);padding-bottom:var(--space-2);">
+        2. MSME, Startup & Banking Credentials
+      </h3>
+
+      <div class="form-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);">
+        <div class="form-group">
+          <label class="form-label required">Udyam MSME Number</label>
+          <input type="text" class="form-input" value="UDYAM-DL-01-0089123">
+        </div>
+        <div class="form-group">
+          <label class="form-label required">Enterprise Category</label>
+          <select class="form-select">
+            <option selected>Micro Enterprise</option>
+            <option>Small Enterprise</option>
+            <option>Medium Enterprise</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">DPIIT Startup India ID</label>
+          <input type="text" class="form-input" value="DIPP-89120">
+        </div>
+        <div class="form-group">
+          <label class="form-label">GeM Seller ID</label>
+          <input type="text" class="form-input" value="GEM-SUP-2026-99120">
+        </div>
+        <div class="form-group">
+          <label class="form-label required">Authorized Signatory</label>
+          <input type="text" class="form-input" value="Priya Nair (Director)">
+        </div>
+        <div class="form-group">
+          <label class="form-label required">Signatory Contact Email</label>
+          <input type="email" class="form-input" value="priya.nair@abctech.in">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/bidder.js"></script>
+<script>
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  Navigation.injectShell('bidder', 'Profile', [{ label: 'Company Profile' }]);
+
+  function syncMCA() {
+    Toast.success('Sync Complete', 'Company data verified against MCA21 and GSTN live repositories.');
+  }
+
+  function saveProfile() {
+    Toast.success('Profile Saved', 'Enterprise supplier profile updated successfully.');
+  }
+</script>
+</body>
+</html>

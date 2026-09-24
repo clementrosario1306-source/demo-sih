@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Tenders — GOVNEXA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/tables.css">
+  <link rel="stylesheet" href="../css/forms.css"><link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+<div class="page-container page-enter" id="root">
+  <div class="page-header">
+    <div class="page-title-group">
+      <h1 class="page-title">Procurement Tender Opportunities</h1>
+      <p class="page-subtitle">Search, inspect statutory criteria, and submit verified compliance bids</p>
+    </div>
+    <div class="page-actions">
+      <a href="submission.html" class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Build New Bid Submission
+      </a>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar" id="tender-filters">
+    <button class="filter-btn active" data-filter="all">All Opportunities</button>
+    <button class="filter-btn" data-filter="msme">MSME Exempted</button>
+    <button class="filter-btn" data-filter="active">Active Closing Soon</button>
+    <button class="filter-btn" data-filter="it">IT & Infrastructure</button>
+  </div>
+
+  <!-- Tender Listing Grid -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(360px, 1fr));gap:var(--space-5);" id="tender-grid"></div>
+</div>
+
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/officer.js"></script>
+<script src="../js/bidder.js"></script>
+<script>
+  if (!localStorage.getItem('govnexa_token')) window.location.href = '../login.html';
+  Navigation.injectShell('bidder', 'Tenders', [{ label: 'Tenders' }]);
+
+  function renderBidderTenders(filter = 'all') {
+    let list = DemoData.TENDERS.filter(t => t.status === 'active' || t.status === 'under_review');
+    
+    if (filter === 'msme') list = list.filter(t => t.id === 'T-2026-001' || t.id.startsWith('T-2026-007'));
+    if (filter === 'it') list = list.filter(t => t.title.toLowerCase().includes('it') || t.title.toLowerCase().includes('network') || t.title.toLowerCase().includes('storage') || t.title.toLowerCase().includes('server') || t.title.toLowerCase().includes('enterprise'));
+
+    const allBtn = document.querySelector('#tender-filters .filter-btn[data-filter="all"]');
+    if (allBtn) allBtn.textContent = `All Opportunities (${DemoData.TENDERS.filter(t => t.status === 'active' || t.status === 'under_review').length})`;
+
+    const grid = document.getElementById('tender-grid');
+    grid.innerHTML = list.map((t, idx) => {
+      const deadline = new Date(t.deadline);
+      const now = new Date();
+      const diff = Math.max(0, Math.floor((deadline - now) / 86400000));
+      return `
+      <div class="card animate-fadeInUp stagger-${(idx % 4) + 1}" style="display:flex;flex-direction:column;justify-content:space-between;">
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:var(--space-2);">
+            <div>
+              <span class="badge badge-verified">MSME EXEMPTED</span>
+              <span class="badge badge-active" style="margin-left:4px;">ACTIVE</span>
+            </div>
+            <div style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--accent-cyan);font-weight:var(--fw-bold);">
+              ⏱ ${diff}d Left
+            </div>
+          </div>
+          <h3 style="font-size:var(--text-base);font-weight:var(--fw-bold);color:var(--text-primary);margin:var(--space-2) 0;">
+            ${t.title}
+          </h3>
+          <div style="font-size:var(--text-xs);color:var(--text-secondary);margin-bottom:var(--space-4);">
+            Ref: <code>${t.id}</code> • ${t.dept}
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);background:var(--bg-elevated);padding:var(--space-3);border-radius:var(--radius-md);margin-bottom:var(--space-4);font-size:var(--text-xs);">
+            <div>
+              <div style="color:var(--text-muted);">Estimated Value</div>
+              <div style="font-weight:var(--fw-bold);color:var(--accent-mint);font-size:var(--text-sm);">${t.value}</div>
+            </div>
+            <div>
+              <div style="color:var(--text-muted);">Submission Deadline</div>
+              <div style="font-weight:var(--fw-bold);color:var(--text-primary);">${Utils.formatDate(t.deadline)}</div>
+            </div>
+            <div>
+              <div style="color:var(--text-muted);">Min Turnover</div>
+              <div style="font-weight:var(--fw-bold);color:var(--text-primary);">₹ 3.0 Cr (3 Yrs)</div>
+            </div>
+            <div>
+              <div style="color:var(--text-muted);">Local Content</div>
+              <div style="font-weight:var(--fw-bold);color:var(--text-primary);">≥ 20% (Class II)</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:var(--space-2);border-top:1px solid var(--border-subtle);padding-top:var(--space-3);">
+          <a href="tender-details.html?id=${t.id}" class="btn btn-secondary" style="flex:1;justify-content:center;font-size:var(--text-xs);">
+            View RFP Details
+          </a>
+          <a href="submission.html?id=${t.id}" class="btn btn-primary" style="flex:1;justify-content:center;font-size:var(--text-xs);">
+            Submit / Edit Bid
+          </a>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  document.querySelectorAll('#tender-filters .filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#tender-filters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderBidderTenders(btn.dataset.filter);
+    });
+  });
+
+  renderBidderTenders();
+</script>
+</body>
+</html>

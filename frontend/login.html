@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TENDERLENZZ — Intelligent Procurement Compliance Platform</title>
+  <meta name="description" content="TENDERLENZZ — Transparent Procurement. Verified Decisions. Government e-procurement compliance platform.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <style>
+    body { min-height: 100vh; display: flex; background: var(--bg-base); overflow: hidden; }
+
+    /* ── Layout ── */
+    .login-shell { display: flex; width: 100%; min-height: 100vh; }
+
+    /* ── Left Panel ── */
+    .login-left {
+      width: 52%;
+      background: var(--bg-elevated);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: var(--space-10) var(--space-12);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Animated background mesh */
+    .login-bg-mesh {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .mesh-circle {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.08;
+      animation: meshFloat 8s ease-in-out infinite alternate;
+    }
+    .mesh-1 { width: 400px; height: 400px; background: var(--accent-cyan);   top: -100px; left: -100px; animation-delay: 0s; }
+    .mesh-2 { width: 300px; height: 300px; background: var(--accent-violet); bottom: 100px; right: -50px; animation-delay: 2s; }
+    .mesh-3 { width: 200px; height: 200px; background: var(--accent-mint);   top: 50%;  left: 50%; animation-delay: 4s; }
+    @keyframes meshFloat { from { transform: translate(0,0) scale(1); } to { transform: translate(20px,20px) scale(1.1); } }
+
+    /* Flow diagram animation */
+    .flow-diagram { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); opacity: 0.18; }
+    .flow-node {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 14px;
+      background: var(--bg-overlay);
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      margin-bottom: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+    .flow-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .flow-line { width: 1px; height: 16px; background: var(--border-default); margin: 0 auto 6px; }
+
+    /* Brand */
+    .login-brand { position: relative; z-index: 1; }
+    .login-logo {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-violet) 100%);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 700; color: white;
+      margin-bottom: var(--space-6);
+      box-shadow: var(--shadow-cyan);
+    }
+    .login-product-name {
+      font-size: 36px; font-weight: 700; letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: var(--space-2);
+    }
+    .login-product-sub {
+      font-size: var(--text-base); color: var(--text-secondary);
+      font-weight: var(--fw-medium); margin-bottom: var(--space-6);
+    }
+    .login-tagline {
+      font-size: var(--text-xl); font-weight: var(--fw-semibold);
+      color: var(--text-primary); line-height: 1.4; max-width: 380px;
+    }
+    .login-tagline span { color: var(--accent-cyan); }
+
+    /* Feature highlights */
+    .login-features { position: relative; z-index: 1; display: flex; flex-direction: column; gap: var(--space-4); }
+    .login-feature {
+      display: flex; align-items: center; gap: var(--space-4);
+      padding: var(--space-4) var(--space-5);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+    .login-feature-icon {
+      width: 36px; height: 36px; border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .login-feature-icon svg { width: 18px; height: 18px; stroke-width: 1.75; }
+    .login-feature-text { font-size: var(--text-sm); color: var(--text-secondary); }
+    .login-feature-text strong { color: var(--text-primary); display: block; font-size: var(--text-sm); margin-bottom: 2px; }
+
+    /* Bottom */
+    .login-bottom { position: relative; z-index: 1; }
+    .login-secure {
+      display: flex; align-items: center; gap: var(--space-2);
+      font-size: var(--text-xs); color: var(--text-muted);
+    }
+
+    /* ── Right Panel ── */
+    .login-right {
+      flex: 1;
+      display: flex; align-items: center; justify-content: center;
+      padding: var(--space-8);
+      background: var(--bg-base);
+    }
+
+    .login-card {
+      width: 100%; max-width: 420px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-2xl);
+      padding: var(--space-8);
+      box-shadow: var(--shadow-xl);
+      animation: fadeInUp 0.4s ease forwards;
+    }
+
+    .login-card-title {
+      font-size: var(--text-2xl); font-weight: var(--fw-bold);
+      color: var(--text-primary); margin-bottom: var(--space-1);
+      letter-spacing: -0.01em;
+    }
+    .login-card-sub { font-size: var(--text-sm); color: var(--text-secondary); margin-bottom: var(--space-8); }
+
+    /* Role selector */
+    .role-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); margin-bottom: var(--space-6); }
+    .role-btn {
+      display: flex; flex-direction: column; align-items: center; gap: var(--space-2);
+      padding: var(--space-3) var(--space-2);
+      background: var(--bg-overlay); border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg); cursor: pointer; transition: all var(--transition-fast);
+      font-size: var(--text-xs); font-weight: var(--fw-semibold);
+      color: var(--text-secondary); text-align: center;
+    }
+    .role-btn:hover { border-color: var(--border-strong); color: var(--text-primary); }
+    .role-btn.selected {
+      border-color: var(--accent-cyan); background: var(--accent-cyan-dim); color: var(--accent-cyan);
+    }
+    .role-btn svg { width: 20px; height: 20px; stroke-width: 1.75; }
+
+    /* Login form */
+    .login-form { display: flex; flex-direction: column; gap: var(--space-5); }
+
+    .login-remember {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: var(--text-sm);
+    }
+    .login-remember label {
+      display: flex; align-items: center; gap: var(--space-2); cursor: pointer; color: var(--text-secondary);
+    }
+    .login-forgot { color: var(--accent-cyan); font-size: var(--text-sm); font-weight: var(--fw-medium); cursor: pointer; }
+    .login-forgot:hover { text-decoration: underline; }
+
+    .login-submit {
+      width: 100%; height: 46px; font-size: var(--text-base);
+      background: var(--accent-cyan); color: var(--text-inverse);
+      border-radius: var(--radius-lg); font-weight: var(--fw-semibold);
+      cursor: pointer; transition: all var(--transition-fast); border: none;
+      display: flex; align-items: center; justify-content: center; gap: var(--space-2);
+      letter-spacing: 0.02em;
+    }
+    .login-submit:hover {
+      background: var(--accent-violet); box-shadow: var(--shadow-cyan);
+      transform: translateY(-1px);
+    }
+    .login-submit:active { transform: translateY(0); }
+    .login-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* Demo credentials */
+    .demo-creds {
+      margin-top: var(--space-5);
+      padding: var(--space-4);
+      background: var(--bg-overlay);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      font-size: var(--text-xs);
+    }
+    .demo-creds-title { color: var(--text-muted); font-weight: var(--fw-semibold); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: var(--space-3); }
+    .demo-cred-row { display: flex; justify-content: space-between; color: var(--text-secondary); margin-bottom: var(--space-1); cursor: pointer; border-radius: var(--radius-sm); padding: 2px 4px; transition: background var(--transition-fast); }
+    .demo-cred-row:hover { background: var(--bg-hover); }
+    .demo-cred-role { color: var(--accent-cyan); font-weight: var(--fw-medium); }
+    .demo-cred-info { font-family: var(--font-mono); color: var(--text-muted); }
+
+    /* Error message */
+    .login-error {
+      padding: var(--space-3) var(--space-4);
+      background: var(--status-failed-bg);
+      border: 1px solid var(--status-failed-border);
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+      color: var(--accent-coral);
+      display: none;
+    }
+
+    /* Secure badge */
+    .secure-badge {
+      display: flex; align-items: center; justify-content: center; gap: var(--space-2);
+      margin-top: var(--space-5); font-size: var(--text-xs); color: var(--text-muted);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .login-left { display: none; }
+      .login-right { padding: var(--space-5); }
+      .login-card { padding: var(--space-6); }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-shell">
+
+    <!-- LEFT PANEL -->
+    <div class="login-left">
+      <div class="login-bg-mesh">
+        <div class="mesh-circle mesh-1"></div>
+        <div class="mesh-circle mesh-2"></div>
+        <div class="mesh-circle mesh-3"></div>
+      </div>
+
+      <!-- Flow diagram -->
+      <div class="flow-diagram" aria-hidden="true">
+        <div class="flow-node"><div class="flow-dot" style="background:var(--accent-cyan)"></div>Tender</div>
+        <div class="flow-line"></div>
+        <div class="flow-node"><div class="flow-dot" style="background:var(--accent-violet)"></div>Requirements</div>
+        <div class="flow-line"></div>
+        <div class="flow-node"><div class="flow-dot" style="background:var(--accent-mint)"></div>Verification</div>
+        <div class="flow-line"></div>
+        <div class="flow-node"><div class="flow-dot" style="background:var(--accent-amber)"></div>Compliance</div>
+        <div class="flow-line"></div>
+        <div class="flow-node"><div class="flow-dot" style="background:var(--accent-coral)"></div>Decision</div>
+        <div class="flow-line"></div>
+        <div class="flow-node"><div class="flow-dot" style="background:var(--accent-mint)"></div>Audit Trail</div>
+      </div>
+
+      <!-- Brand -->
+      <div class="login-brand">
+        <div class="login-logo">T</div>
+        <div class="login-product-name">TENDERLENZZ</div>
+        <div class="login-product-sub">Intelligent Procurement Compliance Platform</div>
+        <div class="login-tagline"><span>Transparent Procurement.</span><br>Verified Decisions.</div>
+      </div>
+
+      <!-- Features -->
+      <div class="login-features">
+        <div class="login-feature">
+          <div class="login-feature-icon" style="background:var(--accent-cyan-dim);color:var(--accent-cyan)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="login-feature-text"><strong>Automated Compliance Verification</strong>GST, EPFO, MCA, PAN cross-verified in real time</div>
+        </div>
+        <div class="login-feature">
+          <div class="login-feature-icon" style="background:var(--accent-mint-dim);color:var(--accent-mint)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="login-feature-text"><strong>Complete Audit Trail</strong>Every decision recorded and explainable</div>
+        </div>
+        <div class="login-feature">
+          <div class="login-feature-icon" style="background:var(--accent-violet-dim);color:var(--accent-violet)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="login-feature-text"><strong>Evidence-Backed Discrepancy Detection</strong>Traceable from requirement to source</div>
+        </div>
+      </div>
+
+      <!-- Bottom -->
+      <div class="login-bottom">
+        <div class="login-secure">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          256-bit SSL encrypted · Government-grade security
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="login-right">
+      <div class="login-card" role="main">
+        <h1 class="login-card-title">Sign In</h1>
+        <p class="login-card-sub">Select your role to access the platform</p>
+
+        <!-- Role selector -->
+        <div class="role-selector" role="radiogroup" aria-label="Select role">
+          <button class="role-btn selected" id="role-officer" data-role="officer" aria-pressed="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Officer
+          </button>
+          <button class="role-btn" id="role-bidder" data-role="bidder" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Bidder
+          </button>
+          <button class="role-btn" id="role-admin" data-role="admin" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Admin
+          </button>
+        </div>
+
+        <!-- Error -->
+        <div class="login-error" id="login-error" role="alert"></div>
+
+        <!-- Form -->
+        <form class="login-form" id="login-form" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="login-email">Email Address <span class="required">*</span></label>
+            <div class="input-wrapper">
+              <span class="input-icon-left">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </span>
+              <input type="email" id="login-email" class="form-input" placeholder="officer@govnexa.in" autocomplete="email" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-password">Password <span class="required">*</span></label>
+            <div class="input-wrapper">
+              <span class="input-icon-left">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </span>
+              <input type="password" id="login-password" class="form-input" placeholder="••••••••" autocomplete="current-password" required>
+              <span class="input-icon-right" id="toggle-password" aria-label="Toggle password visibility">
+                <svg id="eye-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <div class="login-remember">
+            <label>
+              <input type="checkbox" id="remember-me" style="accent-color:var(--accent-cyan);width:15px;height:15px">
+              Remember me
+            </label>
+            <span class="login-forgot" tabindex="0" role="button">Forgot password?</span>
+          </div>
+
+          <button type="submit" class="login-submit" id="login-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            <span id="login-btn-text">SIGN IN</span>
+          </button>
+        </form>
+
+        <!-- Demo credentials -->
+        <div class="demo-creds">
+          <div class="demo-creds-title">Demo Credentials — Click to fill</div>
+          <div class="demo-cred-row" data-email="officer@govnexa.in" data-password="officer123" data-role="officer">
+            <span class="demo-cred-role">Officer</span>
+            <span class="demo-cred-info">officer@govnexa.in / officer123</span>
+          </div>
+          <div class="demo-cred-row" data-email="bidder@govnexa.in" data-password="bidder123" data-role="bidder">
+            <span class="demo-cred-role">Bidder</span>
+            <span class="demo-cred-info">bidder@govnexa.in / bidder123</span>
+          </div>
+          <div class="demo-cred-row" data-email="admin@govnexa.in" data-password="admin123" data-role="admin">
+            <span class="demo-cred-role">Admin</span>
+            <span class="demo-cred-info">admin@govnexa.in / admin123</span>
+          </div>
+        </div>
+
+        <!-- Secure badge -->
+        <div class="secure-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Secure · Encrypted · Government Compliant
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    const DEMO_USERS = {
+      'officer@govnexa.in': { password: 'officer123', role: 'officer', name: 'Arjun Mehta',  org: 'Dept. of Public Procurement' },
+      'bidder@govnexa.in':  { password: 'bidder123',  role: 'bidder',   name: 'Priya Nair',   org: 'ABC Technologies Pvt Ltd' },
+      'admin@govnexa.in':   { password: 'admin123',   role: 'admin',    name: 'Sanjay Verma', org: 'TENDERLENZZ System Admin' },
+    };
+    const ROLE_HOME = { officer: 'officer/dashboard.html', bidder: 'bidder/dashboard.html', admin: 'admin/dashboard.html' };
+
+    let selectedRole = 'officer';
+
+    // If already logged in, redirect
+    if (localStorage.getItem('govnexa_token')) {
+      const role = localStorage.getItem('govnexa_role');
+      if (role && ROLE_HOME[role]) window.location.href = ROLE_HOME[role];
+    }
+
+    function setRoleAndFill(role) {
+      selectedRole = role;
+      document.querySelectorAll('.role-btn').forEach(b => {
+        const isMatch = b.dataset.role === role;
+        b.classList.toggle('selected', isMatch);
+        b.setAttribute('aria-pressed', isMatch ? 'true' : 'false');
+      });
+      const creds = Object.entries(DEMO_USERS).find(([email, u]) => u.role === role);
+      if (creds) {
+        document.getElementById('login-email').value = creds[0];
+        document.getElementById('login-password').value = creds[1].password;
+      }
+    }
+
+    // Role selection buttons
+    document.querySelectorAll('.role-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        setRoleAndFill(btn.dataset.role);
+      });
+    });
+
+    // Toggle password visibility
+    document.getElementById('toggle-password').addEventListener('click', () => {
+      const inp = document.getElementById('login-password');
+      inp.type = inp.type === 'password' ? 'text' : 'password';
+    });
+
+    // Demo credential card click
+    document.querySelectorAll('.demo-cred-row').forEach(row => {
+      row.addEventListener('click', () => {
+        setRoleAndFill(row.dataset.role);
+      });
+    });
+
+    // Pre-populate officer credentials by default on initial page load
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!document.getElementById('login-email').value) {
+        setRoleAndFill('officer');
+      }
+    });
+
+    // Form submit handler
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      let email    = document.getElementById('login-email').value.trim().toLowerCase();
+      let password = document.getElementById('login-password').value;
+      const errorEl  = document.getElementById('login-error');
+      const btn      = document.getElementById('login-btn');
+      const btnText  = document.getElementById('login-btn-text');
+
+      // If fields are empty, autofill current role defaults
+      if (!email || !password) {
+        setRoleAndFill(selectedRole);
+        email    = document.getElementById('login-email').value.trim().toLowerCase();
+        password = document.getElementById('login-password').value;
+      }
+
+      errorEl.style.display = 'none';
+      btn.disabled = true;
+      btnText.textContent = 'Signing in…';
+
+      // Auto-detect role from known demo users if role tab wasn't switched
+      if (DEMO_USERS[email]) {
+        selectedRole = DEMO_USERS[email].role;
+      }
+
+      // Try Backend API First
+      let loginSuccess = false;
+      let targetRole = selectedRole;
+
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, role: selectedRole })
+        });
+        if (response.ok) {
+          const data = await response.json();
+          if (data.token && data.user) {
+            localStorage.setItem('govnexa_token', data.token);
+            localStorage.setItem('govnexa_user',  JSON.stringify(data.user));
+            localStorage.setItem('govnexa_role',  data.user.role);
+            targetRole = data.user.role;
+            loginSuccess = true;
+          }
+        }
+      } catch (err) {
+        // Fallback to local demo auth below
+      }
+
+      // Fallback local auth if offline/mock
+      if (!loginSuccess) {
+        const demo = DEMO_USERS[email];
+        if (demo && demo.password === password) {
+          const user = { id: 'USR-001', email, name: demo.name, role: demo.role, org: demo.org };
+          localStorage.setItem('govnexa_token', 'demo-token-' + Date.now());
+          localStorage.setItem('govnexa_user',  JSON.stringify(user));
+          localStorage.setItem('govnexa_role',  demo.role);
+          targetRole = demo.role;
+          loginSuccess = true;
+        }
+      }
+
+      if (loginSuccess) {
+        btnText.textContent = 'Redirecting…';
+        setTimeout(() => {
+          window.location.href = ROLE_HOME[targetRole] || 'officer/dashboard.html';
+        }, 300);
+      } else {
+        errorEl.textContent = 'Invalid email or password. Click any demo card below to autofill valid credentials.';
+        errorEl.style.display = 'block';
+        btn.disabled = false;
+        btnText.textContent = 'SIGN IN';
+      }
+    });
+  </script>
+</body>
+</html>
